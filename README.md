@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -9,12 +10,15 @@
 
 <style>
 :root{
-  --page-bg:#f4f7fb;
-  --ink:#19212d;
-  --blue:#2563eb;
-  --red:#e11d48;
-  --green:#16a34a;
-  --orange:#f59e0b;
+  --page-bg:#05070a;
+  --panel:#0b1017;
+  --line:#263447;
+  --text:#eaf2ff;
+  --muted:#718096;
+
+  --green:#00d47b;
+  --yellow:#ffd400;
+  --red:#ff334f;
 }
 
 *{
@@ -30,8 +34,10 @@ body{
 }
 
 body{
-  background:var(--page-bg);
-  color:var(--ink);
+  background:#05070a;
+  color:var(--text);
+  overscroll-behavior:none;
+
   font-family:
     system-ui,
     -apple-system,
@@ -39,6 +45,15 @@ body{
     "Yu Gothic",
     sans-serif;
 }
+
+button,
+select{
+  font-family:inherit;
+}
+
+/* =========================
+   全体
+========================= */
 
 .app{
   width:100%;
@@ -50,243 +65,544 @@ body{
   margin:0 auto;
 
   padding:
-    max(12px, env(safe-area-inset-top))
+    max(12px,env(safe-area-inset-top))
     12px
-    max(12px, env(safe-area-inset-bottom));
+    max(12px,env(safe-area-inset-bottom));
 
   display:flex;
   flex-direction:column;
   gap:12px;
 }
 
-/* ヘッダー */
+/* =========================
+   ヘッダー
+========================= */
 
 header{
   width:100%;
 
+  padding:12px 14px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
-
   gap:10px;
+
+  background:#090d13;
+
+  border:1px solid #263447;
+  border-radius:16px;
+}
+
+.title-area{
+  min-width:0;
+}
+
+.system-label{
+  margin-bottom:3px;
+
+  color:#64748b;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:2px;
 }
 
 h1{
   margin:0;
 
-  font-size:clamp(22px,6vw,32px);
+  color:#ffffff;
+
+  font-size:clamp(21px,6vw,31px);
   font-weight:950;
 
+  line-height:1.1;
   white-space:nowrap;
 }
 
-/* ボタン共通 */
-
-button{
-  border:0;
-  border-radius:14px;
-
-  font-family:inherit;
-  font-weight:900;
-
-  cursor:pointer;
-  touch-action:manipulation;
-
-  transition:
-    transform .08s ease,
-    filter .15s ease;
-}
-
-button:active{
-  transform:scale(.96);
-}
-
-button:focus-visible,
-select:focus-visible{
-  outline:4px solid rgba(37,99,235,.35);
-  outline-offset:2px;
-}
-
-/* リセット */
+/* =========================
+   RESET
+========================= */
 
 .reset{
   flex-shrink:0;
 
-  padding:11px 15px;
+  padding:11px 14px;
 
-  background:var(--orange);
+  background:#171f2b;
   color:#ffffff;
 
-  border:2px solid rgba(0,0,0,.15);
+  border:1px solid #3a4656;
+  border-radius:10px;
 
-  box-shadow:0 3px 8px rgba(0,0,0,.16);
+  font-size:14px;
+  font-weight:900;
 
-  font-size:16px;
+  cursor:pointer;
+  touch-action:manipulation;
 }
 
-/* メインカード */
+.reset:active{
+  transform:scale(.96);
+  background:#212c3a;
+}
+
+.reset:focus-visible,
+.pokemon-select:focus-visible,
+.dial-container:focus-visible{
+  outline:3px solid #00d47b;
+  outline-offset:3px;
+}
+
+/* =========================
+   メイン
+========================= */
 
 .card{
   width:100%;
   flex:1;
-  min-height:0;
 
-  padding:18px 14px;
+  padding:14px;
 
-  background:#ffffff;
+  background:#0b1017;
 
-  border:3px solid rgba(0,0,0,.14);
-  border-radius:22px;
-
-  box-shadow:0 6px 20px rgba(35,48,74,.18);
+  border:1px solid #29364a;
+  border-radius:20px;
 
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-
-  transition:background-color .3s ease;
 }
 
-/* ポケモン選択 */
+/* =========================
+   ポケモン選択
+========================= */
+
+.select-frame{
+  width:100%;
+  position:relative;
+}
+
+.select-title{
+  margin-bottom:5px;
+
+  color:#7d8998;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+/* 通常時：黒背景＋白文字 */
 
 .pokemon-select{
   width:100%;
+  height:60px;
 
-  padding:14px 38px 14px 10px;
+  padding:8px 42px 8px 12px;
 
-  background:rgba(255,255,255,.94);
-  color:var(--ink);
+  appearance:none;
+  -webkit-appearance:none;
 
-  border:3px solid rgba(0,0,0,.25);
-  border-radius:14px;
+  background:#0c121b;
+  color:#ffffff;
 
-  box-shadow:0 3px 9px rgba(0,0,0,.14);
+  border:1px solid #354255;
+  border-radius:10px;
 
-  font-family:inherit;
-  font-size:clamp(22px,7vw,30px);
-  font-weight:900;
+  font-size:clamp(20px,5vw,27px);
+  font-weight:950;
 
   text-align:center;
   text-align-last:center;
 
   outline:none;
+  cursor:pointer;
+}
+
+/* 開いた選択肢：白背景＋黒文字 */
+
+.pokemon-select option{
+  background:#ffffff;
+  color:#000000;
+  font-weight:800;
 }
 
 .pokemon-select:focus{
-  border-color:var(--blue);
+  border-color:#00d47b;
 }
 
-/* 弱点 */
+/* ▼ */
 
-.weakness{
-  min-height:52px;
+.select-frame::after{
+  content:"▼";
 
-  margin-top:22px;
-  padding:10px 24px;
+  position:absolute;
+
+  right:15px;
+  bottom:19px;
+
+  color:#ffffff;
+
+  font-size:13px;
+
+  pointer-events:none;
+}
+
+/* =========================
+   HPモニター
+========================= */
+
+.digital-unit{
+  width:100%;
+  flex:1;
+
+  margin-top:14px;
+  padding:10px;
+
+  background:#070a0f;
+
+  border:1px solid #29364a;
+  border-radius:18px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* =========================
+   モニターヘッダー
+========================= */
+
+.digital-header{
+  padding:2px 5px 7px;
 
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:space-between;
 
-  background:rgba(255,255,255,.94);
-  color:#1f2937;
+  color:#69778a;
 
-  border:3px solid rgba(0,0,0,.18);
-  border-radius:999px;
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
 
-  box-shadow:0 3px 9px rgba(0,0,0,.13);
-
-  font-size:clamp(19px,5vw,25px);
-  font-weight:950;
-
-  text-align:center;
-}
-
-.weakness.empty{
-  visibility:hidden;
-}
-
-/* HP */
-
-.hp-panel{
-  min-width:220px;
-
-  margin-top:20px;
-  padding:10px 22px 14px;
-
-  background:rgba(255,255,255,.94);
-
-  border:3px solid rgba(0,0,0,.16);
-  border-radius:22px;
-
-  box-shadow:0 3px 10px rgba(0,0,0,.13);
-
-  text-align:center;
-}
-
-.hp-title{
-  color:#596579;
-
-  font-size:20px;
+  font-size:10px;
   font-weight:900;
+  letter-spacing:1.5px;
 }
 
-.hp{
-  margin:4px 0 0;
+.status-area{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
 
-  color:var(--green);
+.status-light{
+  width:8px;
+  height:8px;
 
-  font-size:clamp(90px,30vw,145px);
-  line-height:.95;
+  background:#00d47b;
 
+  border-radius:50%;
+}
+
+/* =========================
+   円形ダイヤル
+========================= */
+
+.dial-container{
+  width:min(88vw,420px);
+  aspect-ratio:1/1;
+
+  margin:0 auto;
+
+  position:relative;
+
+  user-select:none;
+  touch-action:none;
+
+  cursor:grab;
+}
+
+.dial-container.dragging{
+  cursor:grabbing;
+}
+
+.hp-dial{
+  width:100%;
+  height:100%;
+
+  display:block;
+  touch-action:none;
+}
+
+/* =========================
+   円外装
+========================= */
+
+.outer-case{
+  fill:#05080c;
+
+  stroke:#263447;
+  stroke-width:5;
+}
+
+.outer-case-detail{
+  fill:none;
+
+  stroke:#111924;
+  stroke-width:10;
+}
+
+/* =========================
+   ゲージ
+========================= */
+
+.dial-track{
+  fill:none;
+
+  stroke:#1d2734;
+  stroke-width:24;
+}
+
+/*
+  ゲージは単色表示。
+  発光やぼかしなし。
+  色はJavaScriptでHPに合わせて変更。
+*/
+
+.dial-progress{
+  fill:none;
+
+  stroke:#00d47b;
+  stroke-width:24;
+
+  transform:rotate(-90deg);
+  transform-origin:180px 180px;
+
+  transition:
+    stroke .15s ease;
+}
+
+/* =========================
+   中央
+========================= */
+
+.dial-center{
+  fill:#05080c;
+
+  stroke:#28374a;
+  stroke-width:4;
+}
+
+.dial-center-inner{
+  fill:#090e14;
+
+  stroke:#162333;
+  stroke-width:2;
+}
+
+/* =========================
+   HP文字
+========================= */
+
+.dial-hp-label{
+  fill:#69778a;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:17px;
+  font-weight:900;
+
+  letter-spacing:6px;
+
+  text-anchor:middle;
+}
+
+.dial-hp-value{
+  fill:#00d47b;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:82px;
   font-weight:950;
+
+  text-anchor:middle;
+
   font-variant-numeric:tabular-nums;
+
+  transition:
+    fill .15s ease;
 }
 
-.hp.danger{
-  color:var(--red);
+.dial-unit-label{
+  fill:#526175;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:11px;
+  font-weight:900;
+
+  letter-spacing:3px;
+
+  text-anchor:middle;
 }
 
-.hp.zero{
-  color:#6b7280;
+.dial-percent{
+  fill:#8290a3;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:13px;
+  font-weight:900;
+
+  text-anchor:middle;
 }
 
-/* HP操作 */
+/* =========================
+   目盛り
+========================= */
 
-.stepper{
+.scale-line{
+  stroke:#46566a;
+
+  stroke-width:2;
+  stroke-linecap:round;
+}
+
+.scale-line.major{
+  stroke:#8d9bad;
+  stroke-width:4;
+}
+
+.scale-label{
+  fill:#aebccc;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:12px;
+  font-weight:900;
+
+  text-anchor:middle;
+}
+
+/* =========================
+   操作ノブ
+========================= */
+
+.dial-handle{
+  fill:#05080c;
+
+  stroke:#00d47b;
+  stroke-width:6;
+
+  transition:
+    stroke .15s ease;
+}
+
+.handle-center{
+  fill:#00d47b;
+
+  pointer-events:none;
+
+  transition:
+    fill .15s ease;
+}
+
+.handle-line{
+  stroke:#05080c;
+
+  stroke-width:2;
+  stroke-linecap:round;
+
+  pointer-events:none;
+}
+
+/* =========================
+   操作説明
+========================= */
+
+.dial-guide{
+  margin-top:-6px;
+
+  padding:7px 10px;
+
+  color:#728095;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:11px;
+  font-weight:900;
+
+  letter-spacing:1px;
+
+  text-align:center;
+}
+
+/* =========================
+   MIN STEP MAX
+========================= */
+
+.limit-indicator{
   width:100%;
 
-  margin-top:22px;
+  padding:9px 10px 4px;
 
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-  gap:12px;
+  border-top:1px solid #1f2b3b;
+
+  color:#59697e;
+
+  font-family:
+    "Courier New",
+    ui-monospace,
+    monospace;
+
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
 }
 
-.stepper button{
-  width:100%;
-  min-height:100px;
-
-  border:3px solid rgba(0,0,0,.1);
-
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
-
-  font-size:50px;
+.limit-indicator strong{
+  color:#b7c4d4;
 }
 
-.down{
-  background:#fee2e2;
-  color:#b91c1c;
-}
-
-.up{
-  background:#dcfce7;
-  color:#15803d;
-}
-
-/* 小さいスマホ */
+/* =========================
+   スマホ
+========================= */
 
 @media(max-width:380px){
 
@@ -295,96 +611,92 @@ select:focus-visible{
     padding-right:8px;
   }
 
-  h1{
-    font-size:21px;
-  }
-
-  .reset{
-    padding:10px 12px;
-    font-size:14px;
-  }
-
-  .card{
-    padding:14px 10px;
-  }
-
-  .pokemon-select{
-    font-size:21px;
-  }
-
-  .weakness{
-    margin-top:16px;
-    font-size:18px;
-  }
-
-  .hp-panel{
-    min-width:200px;
-    margin-top:15px;
-  }
-
-  .hp{
-    font-size:100px;
-  }
-
-  .stepper{
-    margin-top:15px;
-  }
-
-  .stepper button{
-    min-height:88px;
-    font-size:44px;
-  }
-}
-
-/* 高さが低いスマホ */
-
-@media(max-height:650px){
-
-  .app{
-    gap:8px;
-
-    padding-top:8px;
-    padding-bottom:8px;
-  }
-
-  h1{
-    font-size:22px;
-  }
-
-  .card{
+  header{
     padding:10px;
   }
 
+  h1{
+    font-size:20px;
+  }
+
+  .reset{
+    padding:9px 11px;
+    font-size:13px;
+  }
+
+  .card{
+    padding:10px 8px;
+  }
+
   .pokemon-select{
-    padding-top:10px;
-    padding-bottom:10px;
+    height:56px;
+    font-size:19px;
   }
 
-  .weakness{
-    min-height:42px;
-
-    margin-top:9px;
-    padding:6px 16px;
+  .digital-unit{
+    margin-top:8px;
+    padding:7px;
   }
 
-  .hp-panel{
-    margin-top:9px;
-    padding:6px 18px 9px;
+  .dial-container{
+    width:min(92vw,360px);
   }
 
-  .hp{
-    font-size:85px;
-  }
-
-  .stepper{
-    margin-top:9px;
-  }
-
-  .stepper button{
-    min-height:70px;
-    font-size:38px;
+  .dial-hp-value{
+    font-size:74px;
   }
 }
+
+/* =========================
+   高さが低いスマホ
+========================= */
+
+@media(max-height:700px){
+
+  .app{
+    gap:7px;
+
+    padding-top:7px;
+    padding-bottom:7px;
+  }
+
+  .system-label{
+    display:none;
+  }
+
+  header{
+    padding:8px 10px;
+  }
+
+  h1{
+    font-size:20px;
+  }
+
+  .card{
+    padding:7px;
+  }
+
+  .pokemon-select{
+    height:52px;
+  }
+
+  .digital-unit{
+    margin-top:6px;
+    padding:6px;
+  }
+
+  .dial-container{
+    width:min(68vh,350px);
+  }
+
+  .dial-guide{
+    margin-top:-10px;
+    padding:4px;
+
+    font-size:9px;
+  }
+}
+
 </style>
 </head>
 
@@ -393,75 +705,219 @@ select:focus-visible{
 <div class="app">
 
   <header>
-    <h1>プラコロカウンター</h1>
+
+    <div class="title-area">
+
+      <div class="system-label">
+        DIGITAL LIFE COUNTER
+      </div>
+
+      <h1>
+        プラコロカウンター
+      </h1>
+
+    </div>
 
     <button
       id="resetBtn"
       class="reset"
       type="button"
     >
-      リセット
+      RESET
     </button>
+
   </header>
 
-  <main
-    id="card"
-    class="card"
-  >
+  <main class="card">
 
-    <select
-      id="pokemonSelect"
-      class="pokemon-select"
-      aria-label="ポケモンを選択"
-    >
-      <option value="">ポケモンを選択</option>
-    </select>
+    <div class="select-frame">
 
-    <div
-      id="weakness"
-      class="weakness empty"
-      aria-live="polite"
-    >
-      弱点：
+      <div class="select-title">
+        MONSTER SELECT
+      </div>
+
+      <select
+        id="pokemonSelect"
+        class="pokemon-select"
+        aria-label="ポケモンを選択"
+      >
+
+        <option value="">
+          ポケモンを選択
+        </option>
+
+      </select>
+
     </div>
 
-    <div class="hp-panel">
+    <section class="digital-unit">
 
-      <div class="hp-title">
-        HP
+      <div class="digital-header">
+
+        <span>
+          LIFE MONITOR
+        </span>
+
+        <span class="status-area">
+
+          <span class="status-light"></span>
+
+          ACTIVE
+
+        </span>
+
       </div>
 
       <div
-        id="hp"
-        class="hp"
-        aria-live="polite"
+        id="dialContainer"
+        class="dial-container"
+        role="slider"
+        aria-label="HP"
+        aria-valuemin="0"
+        aria-valuemax="120"
+        aria-valuenow="120"
+        aria-valuetext="HP 120"
+        tabindex="0"
       >
-        120
+
+        <svg
+          id="hpDial"
+          class="hp-dial"
+          viewBox="0 0 360 360"
+          aria-hidden="true"
+        >
+
+          <circle
+            class="outer-case"
+            cx="180"
+            cy="180"
+            r="167"
+          ></circle>
+
+          <circle
+            class="outer-case-detail"
+            cx="180"
+            cy="180"
+            r="153"
+          ></circle>
+
+          <circle
+            class="dial-track"
+            cx="180"
+            cy="180"
+            r="137"
+          ></circle>
+
+          <circle
+            id="dialProgress"
+            class="dial-progress"
+            cx="180"
+            cy="180"
+            r="137"
+          ></circle>
+
+          <g id="scaleLines"></g>
+
+          <g id="scaleLabels"></g>
+
+          <circle
+            class="dial-center"
+            cx="180"
+            cy="180"
+            r="96"
+          ></circle>
+
+          <circle
+            class="dial-center-inner"
+            cx="180"
+            cy="180"
+            r="87"
+          ></circle>
+
+          <text
+            class="dial-hp-label"
+            x="180"
+            y="140"
+          >
+            HP
+          </text>
+
+          <text
+            id="hpValue"
+            class="dial-hp-value"
+            x="180"
+            y="218"
+          >
+            120
+          </text>
+
+          <text
+            class="dial-unit-label"
+            x="180"
+            y="243"
+          >
+            LIFE POINT
+          </text>
+
+          <text
+            id="hpPercent"
+            class="dial-percent"
+            x="180"
+            y="268"
+          >
+            100%
+          </text>
+
+          <circle
+            id="dialHandle"
+            class="dial-handle"
+            cx="180"
+            cy="43"
+            r="16"
+          ></circle>
+
+          <circle
+            id="handleCenter"
+            class="handle-center"
+            cx="180"
+            cy="43"
+            r="6"
+          ></circle>
+
+          <line
+            id="handleLine"
+            class="handle-line"
+            x1="180"
+            y1="39"
+            x2="180"
+            y2="47"
+          ></line>
+
+        </svg>
+
       </div>
 
-    </div>
+      <div class="dial-guide">
+        RINGをドラッグしてHPを変更
+      </div>
 
-    <div class="stepper">
+      <div class="limit-indicator">
 
-      <button
-        id="downBtn"
-        type="button"
-        class="down"
-        aria-label="HPを10減らす"
-      >
-        ▼
-      </button>
+        <span>
+          MIN <strong>000</strong>
+        </span>
 
-      <button
-        id="upBtn"
-        type="button"
-        class="up"
-        aria-label="HPを10増やす"
-      >
-        ▲
-      </button>
+        <span>
+          STEP <strong>010</strong>
+        </span>
 
-    </div>
+        <span>
+          MAX <strong>120</strong>
+        </span>
+
+      </div>
+
+    </section>
 
   </main>
 
@@ -469,166 +925,39 @@ select:focus-visible{
 
 <script>
 
-/*
-  ポケモンデータ
-  weakness = 表示する弱点
-  colorName = 背景色の種類
-  color = 実際に表示する背景色
-*/
+/* =========================
+   ポケモン
+========================= */
 
 const pokemonData = [
 
-  {
-    name:"ピカチュウ",
-    weakness:"闘",
-    colorName:"黄",
-    color:"#FFD600"
-  },
-
-  {
-    name:"ヒトカゲ",
-    weakness:"水",
-    colorName:"赤",
-    color:"#F44336"
-  },
-
-  {
-    name:"フシギダネ",
-    weakness:"炎",
-    colorName:"緑",
-    color:"#43A047"
-  },
-
-  {
-    name:"ゼニガメ",
-    weakness:"雷",
-    colorName:"青",
-    color:"#2196F3"
-  },
-
-  {
-    name:"ミュウ",
-    weakness:"悪",
-    colorName:"赤紫",
-    color:"#D81B60"
-  },
-
-  {
-    name:"イーブイ",
-    weakness:"闘",
-    colorName:"白",
-    color:"#FFFFFF"
-  },
-
-  {
-    name:"ルカリオ",
-    weakness:"炎",
-    colorName:"オレンジ",
-    color:"#FF9800"
-  },
-
-  {
-    name:"メタグロス",
-    weakness:"炎",
-    colorName:"灰色",
-    color:"#9E9E9E"
-  },
-
-  {
-    name:"ゲンガー",
-    weakness:"超",
-    colorName:"青緑",
-    color:"#00A89D"
-  },
-
-  {
-    name:"イワーク",
-    weakness:"草",
-    colorName:"オレンジ",
-    color:"#FF9800"
-  },
-
-  {
-    name:"ベトベター",
-    weakness:"闘",
-    colorName:"青緑",
-    color:"#00A89D"
-  },
-
-  {
-    name:"カイロス",
-    weakness:"空",
-    colorName:"緑",
-    color:"#43A047"
-  },
-
-  {
-    name:"ファイヤー",
-    weakness:"水",
-    colorName:"赤",
-    color:"#F44336"
-  },
-
-  {
-    name:"サンダー",
-    weakness:"闘",
-    colorName:"黄",
-    color:"#FFD600"
-  },
-
-  {
-    name:"フリーザー",
-    weakness:"鋼",
-    colorName:"青",
-    color:"#2196F3"
-  },
-
-  {
-    name:"ヤミラミ",
-    weakness:"超",
-    colorName:"青緑",
-    color:"#00A89D"
-  },
-
-  {
-    name:"ゲッコウガ",
-    weakness:"草",
-    colorName:"青",
-    color:"#2196F3"
-  },
-
-  {
-    name:"ボスゴドラ",
-    weakness:"闘",
-    colorName:"灰色",
-    color:"#9E9E9E"
-  },
-
-  {
-    name:"レックウザ",
-    weakness:"龍",
-    colorName:"黄土色",
-    color:"#C99700"
-  },
-
-  {
-    name:"カヌチャン",
-    weakness:"炎",
-    colorName:"赤紫",
-    color:"#D81B60"
-  },
-
-  {
-    name:"ラッキー",
-    weakness:"闘",
-    colorName:"白",
-    color:"#FFFFFF"
-  }
+  "ピカチュウ",
+  "ヒトカゲ",
+  "フシギダネ",
+  "ゼニガメ",
+  "ミュウ",
+  "イーブイ",
+  "ルカリオ",
+  "メタグロス",
+  "ゲンガー",
+  "イワーク",
+  "ベトベター",
+  "カイロス",
+  "ファイヤー",
+  "サンダー",
+  "フリーザー",
+  "ヤミラミ",
+  "ゲッコウガ",
+  "ボスゴドラ",
+  "レックウザ",
+  "カヌチャン",
+  "ラッキー"
 
 ];
 
-
-/* HP設定 */
+/* =========================
+   HP設定
+========================= */
 
 const MAX_HP = 120;
 const MIN_HP = 0;
@@ -636,114 +965,725 @@ const HP_STEP = 10;
 
 let hp = MAX_HP;
 
+let isDragging = false;
+let previousPointerAngle = null;
+let accumulatedAngle = 0;
 
-/* HTML要素 */
+/*
+  120HP ÷ 10 = 12段階
+  360度 ÷ 12 = 30度
+*/
+
+const DEGREES_PER_STEP = 30;
+
+/* =========================
+   円設定
+========================= */
+
+const CENTER_X = 180;
+const CENTER_Y = 180;
+
+const DIAL_RADIUS = 137;
+const HANDLE_RADIUS = 137;
+
+const SCALE_INNER_RADIUS = 153;
+const SCALE_OUTER_RADIUS = 161;
+const LABEL_RADIUS = 169;
+
+const CIRCUMFERENCE =
+  2 * Math.PI * DIAL_RADIUS;
+
+/* =========================
+   HTML要素
+========================= */
 
 const pokemonSelect =
   document.getElementById("pokemonSelect");
 
-const weaknessEl =
-  document.getElementById("weakness");
+const hpValueEl =
+  document.getElementById("hpValue");
 
-const hpEl =
-  document.getElementById("hp");
+const hpPercentEl =
+  document.getElementById("hpPercent");
 
-const downBtn =
-  document.getElementById("downBtn");
+const dialContainer =
+  document.getElementById("dialContainer");
 
-const upBtn =
-  document.getElementById("upBtn");
+const hpDial =
+  document.getElementById("hpDial");
+
+const dialProgress =
+  document.getElementById("dialProgress");
+
+const dialHandle =
+  document.getElementById("dialHandle");
+
+const handleCenter =
+  document.getElementById("handleCenter");
+
+const handleLine =
+  document.getElementById("handleLine");
+
+const scaleLines =
+  document.getElementById("scaleLines");
+
+const scaleLabels =
+  document.getElementById("scaleLabels");
 
 const resetBtn =
   document.getElementById("resetBtn");
 
-const card =
-  document.getElementById("card");
+/* =========================
+   ポケモン一覧作成
+========================= */
 
-
-/* ポケモン一覧作成 */
-
-pokemonData.forEach(pokemon => {
+pokemonData.forEach(name => {
 
   const option =
     document.createElement("option");
 
-  option.value =
-    pokemon.name;
-
-  option.textContent =
-    pokemon.name;
+  option.value = name;
+  option.textContent = name;
 
   pokemonSelect.appendChild(option);
 
 });
 
+/* =========================
+   円座標
+========================= */
 
-/* 選択中のポケモンを取得 */
+function polarToCartesian(
+  centerX,
+  centerY,
+  radius,
+  angle
+){
 
-function getSelectedPokemon(){
+  const radians =
+    angle * Math.PI / 180;
 
-  return pokemonData.find(
-    pokemon =>
-      pokemon.name === pokemonSelect.value
+  return {
+
+    x:
+      centerX +
+      radius * Math.cos(radians),
+
+    y:
+      centerY +
+      radius * Math.sin(radians)
+
+  };
+
+}
+
+/* =========================
+   HP → 角度
+========================= */
+
+function hpToAngle(value){
+
+  return -90 +
+    (value / MAX_HP) * 360;
+
+}
+
+/* =========================
+   HPによる色変更
+========================= */
+
+function getHpColor(){
+
+  /*
+    0～40
+    赤
+  */
+
+  if(hp <= 40){
+
+    return "#ff334f";
+
+  }
+
+  /*
+    50～80
+    黄色
+  */
+
+  if(hp <= 80){
+
+    return "#ffd400";
+
+  }
+
+  /*
+    90～120
+    緑
+  */
+
+  return "#00d47b";
+
+}
+
+/* =========================
+   目盛り
+========================= */
+
+function createDialScale(){
+
+  scaleLines.innerHTML = "";
+  scaleLabels.innerHTML = "";
+
+  for(
+    let value = 0;
+    value < MAX_HP;
+    value += HP_STEP
+  ){
+
+    const angle =
+      -90 +
+      (value / MAX_HP) * 360;
+
+    const isMajor =
+      value % 30 === 0;
+
+    const inner =
+      isMajor
+        ? SCALE_INNER_RADIUS - 6
+        : SCALE_INNER_RADIUS;
+
+    const start =
+      polarToCartesian(
+        CENTER_X,
+        CENTER_Y,
+        inner,
+        angle
+      );
+
+    const end =
+      polarToCartesian(
+        CENTER_X,
+        CENTER_Y,
+        SCALE_OUTER_RADIUS,
+        angle
+      );
+
+    const line =
+      document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+      );
+
+    line.setAttribute(
+      "x1",
+      start.x
+    );
+
+    line.setAttribute(
+      "y1",
+      start.y
+    );
+
+    line.setAttribute(
+      "x2",
+      end.x
+    );
+
+    line.setAttribute(
+      "y2",
+      end.y
+    );
+
+    line.setAttribute(
+      "class",
+      isMajor
+        ? "scale-line major"
+        : "scale-line"
+    );
+
+    scaleLines.appendChild(line);
+
+    if(isMajor){
+
+      const pos =
+        polarToCartesian(
+          CENTER_X,
+          CENTER_Y,
+          LABEL_RADIUS,
+          angle
+        );
+
+      const text =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text"
+        );
+
+      text.setAttribute(
+        "x",
+        pos.x
+      );
+
+      text.setAttribute(
+        "y",
+        pos.y + 4
+      );
+
+      text.setAttribute(
+        "class",
+        "scale-label"
+      );
+
+      text.textContent =
+        value === 0
+          ? "0/120"
+          : value;
+
+      scaleLabels.appendChild(text);
+
+    }
+
+  }
+
+}
+
+/* =========================
+   HP表示
+========================= */
+
+function renderHP(){
+
+  const ratio =
+    hp / MAX_HP;
+
+  const hpColor =
+    getHpColor();
+
+  const progressLength =
+    CIRCUMFERENCE * ratio;
+
+  const dashOffset =
+    CIRCUMFERENCE -
+    progressLength;
+
+  const handleAngle =
+    hpToAngle(hp);
+
+  const handlePos =
+    polarToCartesian(
+      CENTER_X,
+      CENTER_Y,
+      HANDLE_RADIUS,
+      handleAngle
+    );
+
+  /*
+    デジタル表示
+    0 → 000
+    40 → 040
+    120 → 120
+  */
+
+  hpValueEl.textContent =
+    String(hp).padStart(3,"0");
+
+  hpPercentEl.textContent =
+    Math.round(
+      ratio * 100
+    ) + "%";
+
+  dialContainer.setAttribute(
+    "aria-valuenow",
+    hp
+  );
+
+  dialContainer.setAttribute(
+    "aria-valuetext",
+    "HP " + hp
+  );
+
+  /*
+    ゲージ量
+  */
+
+  dialProgress.style.strokeDasharray =
+    CIRCUMFERENCE;
+
+  dialProgress.style.strokeDashoffset =
+    dashOffset;
+
+  /*
+    HPによる色
+  */
+
+  dialProgress.style.stroke =
+    hpColor;
+
+  hpValueEl.style.fill =
+    hpColor;
+
+  dialHandle.style.stroke =
+    hpColor;
+
+  handleCenter.style.fill =
+    hpColor;
+
+  /*
+    ノブ位置
+  */
+
+  dialHandle.setAttribute(
+    "cx",
+    handlePos.x
+  );
+
+  dialHandle.setAttribute(
+    "cy",
+    handlePos.y
+  );
+
+  handleCenter.setAttribute(
+    "cx",
+    handlePos.x
+  );
+
+  handleCenter.setAttribute(
+    "cy",
+    handlePos.y
+  );
+
+  /*
+    ノブ内線
+  */
+
+  const lineInner =
+    polarToCartesian(
+      CENTER_X,
+      CENTER_Y,
+      HANDLE_RADIUS - 4,
+      handleAngle
+    );
+
+  const lineOuter =
+    polarToCartesian(
+      CENTER_X,
+      CENTER_Y,
+      HANDLE_RADIUS + 4,
+      handleAngle
+    );
+
+  handleLine.setAttribute(
+    "x1",
+    lineInner.x
+  );
+
+  handleLine.setAttribute(
+    "y1",
+    lineInner.y
+  );
+
+  handleLine.setAttribute(
+    "x2",
+    lineOuter.x
+  );
+
+  handleLine.setAttribute(
+    "y2",
+    lineOuter.y
   );
 
 }
 
+/* =========================
+   ポインター角度取得
+========================= */
 
-/* HP表示更新 */
+function getPointerAngle(event){
 
-function renderHP(){
+  const rect =
+    hpDial.getBoundingClientRect();
 
-  hpEl.textContent = hp;
+  const scaleX =
+    360 / rect.width;
 
-  hpEl.className = "hp";
+  const scaleY =
+    360 / rect.height;
 
-  if(hp === 0){
+  const x =
+    (event.clientX - rect.left)
+    * scaleX;
 
-    hpEl.classList.add("zero");
+  const y =
+    (event.clientY - rect.top)
+    * scaleY;
 
-  }else if(hp <= 30){
-
-    hpEl.classList.add("danger");
-
-  }
+  return Math.atan2(
+    y - CENTER_Y,
+    x - CENTER_X
+  ) * 180 / Math.PI;
 
 }
 
+/* =========================
+   ダイヤル操作
+========================= */
 
-/* ポケモン・弱点・背景色を更新 */
+function updateHpFromDrag(event){
 
-function renderPokemon(){
+  const currentAngle =
+    getPointerAngle(event);
 
-  const pokemon =
-    getSelectedPokemon();
+  if(previousPointerAngle === null){
 
-  if(!pokemon){
-
-    weaknessEl.textContent =
-      "弱点：";
-
-    weaknessEl.classList.add("empty");
-
-    card.style.backgroundColor =
-      "#FFFFFF";
+    previousPointerAngle =
+      currentAngle;
 
     return;
+
   }
 
-  weaknessEl.textContent =
-    "弱点：" + pokemon.weakness;
+  let difference =
+    currentAngle -
+    previousPointerAngle;
 
-  weaknessEl.classList.remove("empty");
+  /*
+    円の0度境界をまたいだ際に
+    360度飛ばないよう補正
+  */
 
-  card.style.backgroundColor =
-    pokemon.color;
+  if(difference > 180){
+
+    difference -= 360;
+
+  }
+
+  if(difference < -180){
+
+    difference += 360;
+
+  }
+
+  accumulatedAngle +=
+    difference;
+
+  /*
+    時計回り
+    HP +10
+  */
+
+  while(
+    accumulatedAngle >=
+    DEGREES_PER_STEP
+  ){
+
+    if(hp < MAX_HP){
+
+      hp = Math.min(
+        MAX_HP,
+        hp + HP_STEP
+      );
+
+      renderHP();
+
+    }
+
+    accumulatedAngle -=
+      DEGREES_PER_STEP;
+
+  }
+
+  /*
+    反時計回り
+    HP -10
+  */
+
+  while(
+    accumulatedAngle <=
+    -DEGREES_PER_STEP
+  ){
+
+    if(hp > MIN_HP){
+
+      hp = Math.max(
+        MIN_HP,
+        hp - HP_STEP
+      );
+
+      renderHP();
+
+    }
+
+    accumulatedAngle +=
+      DEGREES_PER_STEP;
+
+  }
+
+  /*
+    120 → 0へ飛ばない
+  */
+
+  if(
+    hp === MAX_HP &&
+    accumulatedAngle > 0
+  ){
+
+    accumulatedAngle = 0;
+
+  }
+
+  /*
+    0 → 120へ飛ばない
+  */
+
+  if(
+    hp === MIN_HP &&
+    accumulatedAngle < 0
+  ){
+
+    accumulatedAngle = 0;
+
+  }
+
+  previousPointerAngle =
+    currentAngle;
 
 }
 
+/* =========================
+   操作開始
+========================= */
 
-/* ポケモン変更 */
+dialContainer.addEventListener(
+  "pointerdown",
+  event => {
+
+    event.preventDefault();
+
+    isDragging = true;
+
+    previousPointerAngle =
+      getPointerAngle(event);
+
+    accumulatedAngle = 0;
+
+    dialContainer.classList.add(
+      "dragging"
+    );
+
+    dialContainer.setPointerCapture(
+      event.pointerId
+    );
+
+  }
+);
+
+/* =========================
+   操作中
+========================= */
+
+dialContainer.addEventListener(
+  "pointermove",
+  event => {
+
+    if(!isDragging){
+      return;
+    }
+
+    event.preventDefault();
+
+    updateHpFromDrag(event);
+
+  }
+);
+
+/* =========================
+   操作終了
+========================= */
+
+function stopDragging(event){
+
+  isDragging = false;
+
+  previousPointerAngle = null;
+  accumulatedAngle = 0;
+
+  dialContainer.classList.remove(
+    "dragging"
+  );
+
+  if(
+    event &&
+    dialContainer.hasPointerCapture(
+      event.pointerId
+    )
+  ){
+
+    dialContainer.releasePointerCapture(
+      event.pointerId
+    );
+
+  }
+
+}
+
+dialContainer.addEventListener(
+  "pointerup",
+  stopDragging
+);
+
+dialContainer.addEventListener(
+  "pointercancel",
+  stopDragging
+);
+
+/* =========================
+   キーボード操作
+========================= */
+
+dialContainer.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowDown"
+    ){
+
+      event.preventDefault();
+
+      hp = Math.max(
+        MIN_HP,
+        hp - HP_STEP
+      );
+
+      renderHP();
+
+    }
+
+    if(
+      event.key === "ArrowRight" ||
+      event.key === "ArrowUp"
+    ){
+
+      event.preventDefault();
+
+      hp = Math.min(
+        MAX_HP,
+        hp + HP_STEP
+      );
+
+      renderHP();
+
+    }
+
+  }
+);
+
+/* =========================
+   ポケモン変更
+
+   HPは120に戻す
+========================= */
 
 pokemonSelect.addEventListener(
   "change",
@@ -751,52 +1691,20 @@ pokemonSelect.addEventListener(
 
     hp = MAX_HP;
 
-    renderPokemon();
-    renderHP();
-
-  }
-);
-
-
-/* HPを10減らす */
-
-downBtn.addEventListener(
-  "click",
-  () => {
-
-    hp = Math.max(
-      MIN_HP,
-      hp - HP_STEP
-    );
+    previousPointerAngle = null;
+    accumulatedAngle = 0;
 
     renderHP();
 
   }
 );
 
+/* =========================
+   RESET
 
-/* HPを10増やす */
-
-upBtn.addEventListener(
-  "click",
-  () => {
-
-    hp = Math.min(
-      MAX_HP,
-      hp + HP_STEP
-    );
-
-    renderHP();
-
-  }
-);
-
-
-/*
-  リセット
-  ポケモン・弱点・背景色は維持
-  HPだけ120に戻す
-*/
+   ポケモンは維持
+   HPだけ120
+========================= */
 
 resetBtn.addEventListener(
   "click",
@@ -804,15 +1712,19 @@ resetBtn.addEventListener(
 
     hp = MAX_HP;
 
+    previousPointerAngle = null;
+    accumulatedAngle = 0;
+
     renderHP();
 
   }
 );
 
+/* =========================
+   初期表示
+========================= */
 
-/* 初期表示 */
-
-renderPokemon();
+createDialScale();
 renderHP();
 
 </script>
