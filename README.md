@@ -2,56 +2,825 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>プラコロ カウンター</title>
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+>
+<title>プラコロカウンター</title>
+
 <style>
-:root{--bg:#f3f6fa;--card:#fff;--ink:#172033;--line:#d9e1ec;--green:#16a34a;--red:#dc2626;--blue:#2563eb}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
-.app{min-height:100vh;max-width:560px;margin:auto;padding:14px;display:flex;flex-direction:column;gap:14px}
-h1{text-align:center;margin:4px 0 0;font-size:30px}
-.card{background:rgba(255,255,255,.90);backdrop-filter:blur(5px);border-radius:20px;padding:18px;box-shadow:0 5px 20px #1f293712}
-label{display:block;font-weight:900;font-size:20px;margin-bottom:9px}
-select{width:100%;font-size:24px;font-weight:800;padding:15px;border:2px solid var(--line);border-radius:14px;background:#fff;color:var(--ink)}
-.hp-label{text-align:center;font-weight:900;font-size:20px;margin-top:18px}.hp{text-align:center;font-weight:950;color:var(--green);font-size:88px;line-height:1.05;margin:8px 0 16px;font-variant-numeric:tabular-nums}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px}.buttons button{border:0;border-radius:16px;padding:22px 8px;font-size:42px;font-weight:950;touch-action:manipulation}.down{background:#fee2e2;color:var(--red)}.up{background:#dcfce7;color:var(--green)}
-.bgtools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bgbtn{border:0;border-radius:14px;padding:14px 8px;font-size:17px;font-weight:900;background:#111827;color:#fff}.removebg{background:#64748b}.reset{width:100%;border:0;border-radius:16px;background:var(--blue);color:#fff;font-size:22px;font-weight:900;padding:17px;touch-action:manipulation}
-.note{text-align:center;color:#687386;font-size:14px}
-@media(max-width:380px){.app{padding:10px}.hp{font-size:76px}h1{font-size:26px}.buttons button{font-size:36px;padding:19px 6px}}
+:root{
+  --page-bg:#f4f7fb;
+  --ink:#19212d;
+  --blue:#2563eb;
+  --red:#e11d48;
+  --green:#16a34a;
+  --orange:#f59e0b;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  width:100%;
+  min-height:100%;
+  margin:0;
+}
+
+body{
+  background:var(--page-bg);
+  color:var(--ink);
+
+  font-family:
+    system-ui,
+    -apple-system,
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    sans-serif;
+}
+
+.app{
+  width:100%;
+  max-width:600px;
+
+  min-height:100vh;
+  min-height:100dvh;
+
+  margin:0 auto;
+
+  padding:
+    max(12px, env(safe-area-inset-top))
+    12px
+    max(12px, env(safe-area-inset-bottom));
+
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* ヘッダー */
+
+header{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+h1{
+  margin:0;
+
+  font-size:clamp(22px,6vw,32px);
+  font-weight:950;
+
+  white-space:nowrap;
+}
+
+/* ボタン共通 */
+
+button{
+  border:0;
+  border-radius:14px;
+
+  font-family:inherit;
+  font-weight:900;
+
+  cursor:pointer;
+  touch-action:manipulation;
+
+  transition:
+    transform .08s ease,
+    filter .15s ease;
+}
+
+button:active{
+  transform:scale(.96);
+}
+
+button:focus-visible,
+select:focus-visible{
+  outline:4px solid rgba(37,99,235,.35);
+  outline-offset:2px;
+}
+
+/* リセット */
+
+.reset{
+  flex-shrink:0;
+
+  padding:11px 15px;
+
+  background:var(--orange);
+  color:#ffffff;
+
+  border:2px solid rgba(0,0,0,.15);
+
+  box-shadow:0 3px 8px rgba(0,0,0,.16);
+
+  font-size:16px;
+}
+
+/* メインカード */
+
+.card{
+  width:100%;
+  flex:1;
+  min-height:0;
+
+  padding:18px 14px;
+
+  background:#ffffff;
+
+  border:3px solid rgba(0,0,0,.14);
+  border-radius:22px;
+
+  box-shadow:0 6px 20px rgba(35,48,74,.18);
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  transition:background-color .3s ease;
+}
+
+/* ポケモン選択 */
+
+.pokemon-select{
+  width:100%;
+
+  padding:14px 38px 14px 10px;
+
+  background:rgba(255,255,255,.94);
+  color:var(--ink);
+
+  border:3px solid rgba(0,0,0,.25);
+  border-radius:14px;
+
+  box-shadow:0 3px 9px rgba(0,0,0,.14);
+
+  font-family:inherit;
+  font-size:clamp(22px,7vw,30px);
+  font-weight:900;
+
+  text-align:center;
+  text-align-last:center;
+
+  outline:none;
+}
+
+.pokemon-select:focus{
+  border-color:var(--blue);
+}
+
+/* 弱点 */
+
+.weakness{
+  min-height:52px;
+
+  margin-top:22px;
+  padding:10px 24px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,.94);
+  color:#1f2937;
+
+  border:3px solid rgba(0,0,0,.18);
+  border-radius:999px;
+
+  box-shadow:0 3px 9px rgba(0,0,0,.13);
+
+  font-size:clamp(19px,5vw,25px);
+  font-weight:950;
+
+  text-align:center;
+}
+
+.weakness.empty{
+  visibility:hidden;
+}
+
+/* HP */
+
+.hp-panel{
+  min-width:220px;
+
+  margin-top:20px;
+  padding:10px 22px 14px;
+
+  background:rgba(255,255,255,.94);
+
+  border:3px solid rgba(0,0,0,.16);
+  border-radius:22px;
+
+  box-shadow:0 3px 10px rgba(0,0,0,.13);
+
+  text-align:center;
+}
+
+.hp-title{
+  color:#596579;
+
+  font-size:20px;
+  font-weight:900;
+}
+
+.hp{
+  margin:4px 0 0;
+
+  color:var(--green);
+
+  font-size:clamp(90px,30vw,145px);
+  line-height:.95;
+
+  font-weight:950;
+  font-variant-numeric:tabular-nums;
+}
+
+.hp.danger{
+  color:var(--red);
+}
+
+.hp.zero{
+  color:#6b7280;
+}
+
+/* HP操作 */
+
+.stepper{
+  width:100%;
+
+  margin-top:22px;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:12px;
+}
+
+.stepper button{
+  width:100%;
+  min-height:100px;
+
+  border:3px solid rgba(0,0,0,.1);
+
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+  font-size:50px;
+}
+
+.down{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.up{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+/* 小さいスマホ */
+
+@media(max-width:380px){
+
+  .app{
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  h1{
+    font-size:21px;
+  }
+
+  .reset{
+    padding:10px 12px;
+    font-size:14px;
+  }
+
+  .card{
+    padding:14px 10px;
+  }
+
+  .pokemon-select{
+    font-size:21px;
+  }
+
+  .weakness{
+    margin-top:16px;
+    font-size:18px;
+  }
+
+  .hp-panel{
+    min-width:200px;
+    margin-top:15px;
+  }
+
+  .hp{
+    font-size:100px;
+  }
+
+  .stepper{
+    margin-top:15px;
+  }
+
+  .stepper button{
+    min-height:88px;
+    font-size:44px;
+  }
+}
+
+/* 高さが低いスマホ */
+
+@media(max-height:650px){
+
+  .app{
+    gap:8px;
+
+    padding-top:8px;
+    padding-bottom:8px;
+  }
+
+  h1{
+    font-size:22px;
+  }
+
+  .card{
+    padding:10px;
+  }
+
+  .pokemon-select{
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+
+  .weakness{
+    min-height:42px;
+
+    margin-top:9px;
+    padding:6px 16px;
+  }
+
+  .hp-panel{
+    margin-top:9px;
+    padding:6px 18px 9px;
+  }
+
+  .hp{
+    font-size:85px;
+  }
+
+  .stepper{
+    margin-top:9px;
+  }
+
+  .stepper button{
+    min-height:70px;
+    font-size:38px;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
-<h1>プラコロ カウンター</h1>
-<div class="bgtools"><button id="chooseBg" class="bgbtn" type="button">背景画像を選択</button><button id="removeBg" class="bgbtn removebg" type="button">背景を削除</button></div><input id="bgInput" type="file" accept="image/*" hidden>
-<div class="card">
-<label for="pokemon">ポケモン</label>
-<select id="pokemon">
-<option value="">選択してください</option>
-<option>ピカチュウ</option><option>ヒトカゲ</option><option>フシギダネ</option><option>ゼニガメ</option><option>ミュウ</option><option>イーブイ</option><option>ルカリオ</option><option>メタグロス</option><option>ゲンガー</option><option>イワーク</option><option>ベトベター</option><option>カイロス</option><option>ファイヤー</option><option>サンダー</option><option>フリーザー</option><option>ヤミラミ</option><option>ゲッコウガ</option><option>ボスゴドラ</option><option>レックウザ</option><option>カヌチャン</option><option>ラッキー</option>
-</select>
-<div class="hp-label">HP</div>
-<div id="hp" class="hp">120</div>
-<div class="buttons">
-<button id="down" class="down" type="button" aria-label="HPを10減らす">▼ 10</button>
-<button id="up" class="up" type="button" aria-label="HPを10増やす">▲ 10</button>
+
+  <header>
+
+    <h1>
+      プラコロカウンター
+    </h1>
+
+    <button
+      id="resetBtn"
+      class="reset"
+      type="button"
+    >
+      リセット
+    </button>
+
+  </header>
+
+  <main
+    id="card"
+    class="card"
+  >
+
+    <select
+      id="pokemonSelect"
+      class="pokemon-select"
+      aria-label="ポケモンを選択"
+    >
+      <option value="">
+        ポケモンを選択
+      </option>
+    </select>
+
+    <div
+      id="weakness"
+      class="weakness empty"
+      aria-live="polite"
+    >
+      弱点：
+    </div>
+
+    <div class="hp-panel">
+
+      <div class="hp-title">
+        HP
+      </div>
+
+      <div
+        id="hp"
+        class="hp"
+        aria-live="polite"
+      >
+        120
+      </div>
+
+    </div>
+
+    <div class="stepper">
+
+      <button
+        id="downBtn"
+        type="button"
+        class="down"
+        aria-label="HPを10減らす"
+      >
+        ▼
+      </button>
+
+      <button
+        id="upBtn"
+        type="button"
+        class="up"
+        aria-label="HPを10増やす"
+      >
+        ▲
+      </button>
+
+    </div>
+
+  </main>
+
 </div>
-</div>
-<button id="reset" class="reset" type="button">HPを120に戻す</button>
-<div class="note">HPは0～120の範囲で10ずつ変更できます</div>
-</div>
+
 <script>
-let hp=120;const hpEl=document.getElementById('hp');const bgInput=document.getElementById('bgInput');
-function setBg(data){document.body.style.backgroundImage=data?`linear-gradient(rgba(243,246,250,.15),rgba(243,246,250,.15)),url(${data})`:'';}
-try{const saved=localStorage.getItem('placoroBg');if(saved)setBg(saved)}catch(e){}
-function render(){hpEl.textContent=hp;hpEl.style.color=hp===0?'#dc2626':hp<=40?'#ea580c':'#16a34a'}
-document.getElementById('down').addEventListener('click',()=>{hp=Math.max(0,hp-10);render()});
-document.getElementById('up').addEventListener('click',()=>{hp=Math.min(120,hp+10);render()});
-document.getElementById('reset').addEventListener('click',()=>{hp=120;render()});
-document.getElementById('chooseBg').addEventListener('click',()=>bgInput.click());
-bgInput.addEventListener('change',()=>{const f=bgInput.files&&bgInput.files[0];if(!f)return;if(!f.type.startsWith('image/'))return;const r=new FileReader();r.onload=()=>{const data=r.result;setBg(data);try{localStorage.setItem('placoroBg',data)}catch(e){};};r.readAsDataURL(f);});
-document.getElementById('removeBg').addEventListener('click',()=>{setBg('');bgInput.value='';try{localStorage.removeItem('placoroBg')}catch(e){}});
-render();
+
+/*
+  ポケモンデータ
+
+  weakness
+  表示する弱点
+
+  colorName
+  背景色の種類
+
+  color
+  実際に表示する背景色
+*/
+
+const pokemonData = [
+
+  {
+    name:"ピカチュウ",
+    weakness:"闘",
+    colorName:"黄",
+    color:"#FFD600"
+  },
+
+  {
+    name:"ヒトカゲ",
+    weakness:"水",
+    colorName:"赤",
+    color:"#F44336"
+  },
+
+  {
+    name:"フシギダネ",
+    weakness:"炎",
+    colorName:"緑",
+    color:"#43A047"
+  },
+
+  {
+    name:"ゼニガメ",
+    weakness:"雷",
+    colorName:"青",
+    color:"#2196F3"
+  },
+
+  {
+    name:"ミュウ",
+    weakness:"悪",
+    colorName:"赤紫",
+    color:"#D81B60"
+  },
+
+  {
+    name:"イーブイ",
+    weakness:"闘",
+    colorName:"白",
+    color:"#FFFFFF"
+  },
+
+  {
+    name:"ルカリオ",
+    weakness:"炎",
+    colorName:"オレンジ",
+    color:"#FF9800"
+  },
+
+  {
+    name:"メタグロス",
+    weakness:"炎",
+    colorName:"灰色",
+    color:"#9E9E9E"
+  },
+
+  {
+    name:"ゲンガー",
+    weakness:"超",
+    colorName:"青緑",
+    color:"#00A89D"
+  },
+
+  {
+    name:"イワーク",
+    weakness:"草",
+    colorName:"オレンジ",
+    color:"#FF9800"
+  },
+
+  {
+    name:"ベトベター",
+    weakness:"闘",
+    colorName:"青緑",
+    color:"#00A89D"
+  },
+
+  {
+    name:"カイロス",
+    weakness:"空",
+    colorName:"緑",
+    color:"#43A047"
+  },
+
+  {
+    name:"ファイヤー",
+    weakness:"水",
+    colorName:"赤",
+    color:"#F44336"
+  },
+
+  {
+    name:"サンダー",
+    weakness:"闘",
+    colorName:"黄",
+    color:"#FFD600"
+  },
+
+  {
+    name:"フリーザー",
+    weakness:"鋼",
+    colorName:"青",
+    color:"#2196F3"
+  },
+
+  {
+    name:"ヤミラミ",
+    weakness:"超",
+    colorName:"青緑",
+    color:"#00A89D"
+  },
+
+  {
+    name:"ゲッコウガ",
+    weakness:"草",
+    colorName:"青",
+    color:"#2196F3"
+  },
+
+  {
+    name:"ボスゴドラ",
+    weakness:"闘",
+    colorName:"灰色",
+    color:"#9E9E9E"
+  },
+
+  {
+    name:"レックウザ",
+    weakness:"龍",
+    colorName:"黄土色",
+    color:"#C99700"
+  },
+
+  {
+    name:"カヌチャン",
+    weakness:"炎",
+    colorName:"赤紫",
+    color:"#D81B60"
+  },
+
+  {
+    name:"ラッキー",
+    weakness:"闘",
+    colorName:"白",
+    color:"#FFFFFF"
+  }
+
+];
+
+/* HP設定 */
+
+const MAX_HP = 120;
+const MIN_HP = 0;
+const HP_STEP = 10;
+
+let hp = MAX_HP;
+
+/* HTML要素 */
+
+const pokemonSelect =
+  document.getElementById("pokemonSelect");
+
+const weaknessEl =
+  document.getElementById("weakness");
+
+const hpEl =
+  document.getElementById("hp");
+
+const downBtn =
+  document.getElementById("downBtn");
+
+const upBtn =
+  document.getElementById("upBtn");
+
+const resetBtn =
+  document.getElementById("resetBtn");
+
+const card =
+  document.getElementById("card");
+
+/* ポケモン一覧作成 */
+
+pokemonData.forEach(pokemon => {
+
+  const option =
+    document.createElement("option");
+
+  option.value =
+    pokemon.name;
+
+  option.textContent =
+    pokemon.name;
+
+  pokemonSelect.appendChild(option);
+
+});
+
+/* 選択中のポケモンを取得 */
+
+function getSelectedPokemon(){
+
+  return pokemonData.find(
+    pokemon =>
+      pokemon.name === pokemonSelect.value
+  );
+
+}
+
+/* HP表示更新 */
+
+function renderHP(){
+
+  hpEl.textContent = hp;
+
+  hpEl.className = "hp";
+
+  if(hp === 0){
+
+    hpEl.classList.add("zero");
+
+  }else if(hp <= 30){
+
+    hpEl.classList.add("danger");
+
+  }
+
+}
+
+/* ポケモン、弱点、背景色を更新 */
+
+function renderPokemon(){
+
+  const pokemon =
+    getSelectedPokemon();
+
+  if(!pokemon){
+
+    weaknessEl.textContent =
+      "弱点：";
+
+    weaknessEl.classList.add("empty");
+
+    card.style.backgroundColor =
+      "#FFFFFF";
+
+    return;
+
+  }
+
+  weaknessEl.textContent =
+    "弱点：" + pokemon.weakness;
+
+  weaknessEl.classList.remove("empty");
+
+  card.style.backgroundColor =
+    pokemon.color;
+
+}
+
+/* ポケモン変更 */
+
+pokemonSelect.addEventListener(
+  "change",
+  () => {
+
+    hp = MAX_HP;
+
+    renderPokemon();
+    renderHP();
+
+  }
+);
+
+/* HPを10減らす */
+
+downBtn.addEventListener(
+  "click",
+  () => {
+
+    hp = Math.max(
+      MIN_HP,
+      hp - HP_STEP
+    );
+
+    renderHP();
+
+  }
+);
+
+/* HPを10増やす */
+
+upBtn.addEventListener(
+  "click",
+  () => {
+
+    hp = Math.min(
+      MAX_HP,
+      hp + HP_STEP
+    );
+
+    renderHP();
+
+  }
+);
+
+/*
+  リセット
+
+  ポケモン、弱点、背景色は維持
+  HPだけ120に戻す
+*/
+
+resetBtn.addEventListener(
+  "click",
+  () => {
+
+    hp = MAX_HP;
+
+    renderHP();
+
+  }
+);
+
+/* 初期表示 */
+
+renderPokemon();
+renderHP();
+
 </script>
+
 </body>
 </html>
