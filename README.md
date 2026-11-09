@@ -435,4 +435,388 @@ select:focus-visible{
       <div
         id="hp"
         class="hp"
-        aria-live="
+        aria-live="polite"
+      >
+        120
+      </div>
+
+    </div>
+
+    <div class="stepper">
+
+      <button
+        id="downBtn"
+        type="button"
+        class="down"
+        aria-label="HPを10減らす"
+      >
+        ▼
+      </button>
+
+      <button
+        id="upBtn"
+        type="button"
+        class="up"
+        aria-label="HPを10増やす"
+      >
+        ▲
+      </button>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+/*
+  ポケモンデータ
+  weakness = 表示する弱点
+  colorName = 背景色の種類
+  color = 実際に表示する背景色
+*/
+
+const pokemonData = [
+
+  {
+    name:"ピカチュウ",
+    weakness:"闘",
+    colorName:"黄",
+    color:"#FFD600"
+  },
+
+  {
+    name:"ヒトカゲ",
+    weakness:"水",
+    colorName:"赤",
+    color:"#F44336"
+  },
+
+  {
+    name:"フシギダネ",
+    weakness:"炎",
+    colorName:"緑",
+    color:"#43A047"
+  },
+
+  {
+    name:"ゼニガメ",
+    weakness:"雷",
+    colorName:"青",
+    color:"#2196F3"
+  },
+
+  {
+    name:"ミュウ",
+    weakness:"悪",
+    colorName:"赤紫",
+    color:"#D81B60"
+  },
+
+  {
+    name:"イーブイ",
+    weakness:"闘",
+    colorName:"白",
+    color:"#FFFFFF"
+  },
+
+  {
+    name:"ルカリオ",
+    weakness:"炎",
+    colorName:"オレンジ",
+    color:"#FF9800"
+  },
+
+  {
+    name:"メタグロス",
+    weakness:"炎",
+    colorName:"灰色",
+    color:"#9E9E9E"
+  },
+
+  {
+    name:"ゲンガー",
+    weakness:"超",
+    colorName:"青緑",
+    color:"#00A89D"
+  },
+
+  {
+    name:"イワーク",
+    weakness:"草",
+    colorName:"オレンジ",
+    color:"#FF9800"
+  },
+
+  {
+    name:"ベトベター",
+    weakness:"闘",
+    colorName:"青緑",
+    color:"#00A89D"
+  },
+
+  {
+    name:"カイロス",
+    weakness:"空",
+    colorName:"緑",
+    color:"#43A047"
+  },
+
+  {
+    name:"ファイヤー",
+    weakness:"水",
+    colorName:"赤",
+    color:"#F44336"
+  },
+
+  {
+    name:"サンダー",
+    weakness:"闘",
+    colorName:"黄",
+    color:"#FFD600"
+  },
+
+  {
+    name:"フリーザー",
+    weakness:"鋼",
+    colorName:"青",
+    color:"#2196F3"
+  },
+
+  {
+    name:"ヤミラミ",
+    weakness:"超",
+    colorName:"青緑",
+    color:"#00A89D"
+  },
+
+  {
+    name:"ゲッコウガ",
+    weakness:"草",
+    colorName:"青",
+    color:"#2196F3"
+  },
+
+  {
+    name:"ボスゴドラ",
+    weakness:"闘",
+    colorName:"灰色",
+    color:"#9E9E9E"
+  },
+
+  {
+    name:"レックウザ",
+    weakness:"龍",
+    colorName:"黄土色",
+    color:"#C99700"
+  },
+
+  {
+    name:"カヌチャン",
+    weakness:"炎",
+    colorName:"赤紫",
+    color:"#D81B60"
+  },
+
+  {
+    name:"ラッキー",
+    weakness:"闘",
+    colorName:"白",
+    color:"#FFFFFF"
+  }
+
+];
+
+
+/* HP設定 */
+
+const MAX_HP = 120;
+const MIN_HP = 0;
+const HP_STEP = 10;
+
+let hp = MAX_HP;
+
+
+/* HTML要素 */
+
+const pokemonSelect =
+  document.getElementById("pokemonSelect");
+
+const weaknessEl =
+  document.getElementById("weakness");
+
+const hpEl =
+  document.getElementById("hp");
+
+const downBtn =
+  document.getElementById("downBtn");
+
+const upBtn =
+  document.getElementById("upBtn");
+
+const resetBtn =
+  document.getElementById("resetBtn");
+
+const card =
+  document.getElementById("card");
+
+
+/* ポケモン一覧作成 */
+
+pokemonData.forEach(pokemon => {
+
+  const option =
+    document.createElement("option");
+
+  option.value =
+    pokemon.name;
+
+  option.textContent =
+    pokemon.name;
+
+  pokemonSelect.appendChild(option);
+
+});
+
+
+/* 選択中のポケモンを取得 */
+
+function getSelectedPokemon(){
+
+  return pokemonData.find(
+    pokemon =>
+      pokemon.name === pokemonSelect.value
+  );
+
+}
+
+
+/* HP表示更新 */
+
+function renderHP(){
+
+  hpEl.textContent = hp;
+
+  hpEl.className = "hp";
+
+  if(hp === 0){
+
+    hpEl.classList.add("zero");
+
+  }else if(hp <= 30){
+
+    hpEl.classList.add("danger");
+
+  }
+
+}
+
+
+/* ポケモン・弱点・背景色を更新 */
+
+function renderPokemon(){
+
+  const pokemon =
+    getSelectedPokemon();
+
+  if(!pokemon){
+
+    weaknessEl.textContent =
+      "弱点：";
+
+    weaknessEl.classList.add("empty");
+
+    card.style.backgroundColor =
+      "#FFFFFF";
+
+    return;
+  }
+
+  weaknessEl.textContent =
+    "弱点：" + pokemon.weakness;
+
+  weaknessEl.classList.remove("empty");
+
+  card.style.backgroundColor =
+    pokemon.color;
+
+}
+
+
+/* ポケモン変更 */
+
+pokemonSelect.addEventListener(
+  "change",
+  () => {
+
+    hp = MAX_HP;
+
+    renderPokemon();
+    renderHP();
+
+  }
+);
+
+
+/* HPを10減らす */
+
+downBtn.addEventListener(
+  "click",
+  () => {
+
+    hp = Math.max(
+      MIN_HP,
+      hp - HP_STEP
+    );
+
+    renderHP();
+
+  }
+);
+
+
+/* HPを10増やす */
+
+upBtn.addEventListener(
+  "click",
+  () => {
+
+    hp = Math.min(
+      MAX_HP,
+      hp + HP_STEP
+    );
+
+    renderHP();
+
+  }
+);
+
+
+/*
+  リセット
+  ポケモン・弱点・背景色は維持
+  HPだけ120に戻す
+*/
+
+resetBtn.addEventListener(
+  "click",
+  () => {
+
+    hp = MAX_HP;
+
+    renderHP();
+
+  }
+);
+
+
+/* 初期表示 */
+
+renderPokemon();
+renderHP();
+
+</script>
+
+</body>
+</html>
