@@ -32,7 +32,6 @@ body{
   height:100%;
   margin:0;
   padding:0;
-
   overflow:hidden;
   overscroll-behavior:none;
 }
@@ -77,7 +76,6 @@ button{
 .app{
   width:100%;
   max-width:600px;
-
   height:var(--app-height);
 
   margin:0 auto;
@@ -89,14 +87,13 @@ button{
 
   display:flex;
   flex-direction:column;
-
   gap:4px;
 
   overflow:hidden;
 }
 
 /* =========================
-   上部操作
+   上部
 ========================= */
 
 .top-control{
@@ -107,8 +104,6 @@ button{
   grid-template-columns:minmax(0,1fr) auto;
 
   gap:5px;
-
-  align-items:stretch;
 }
 
 .select-frame{
@@ -146,7 +141,6 @@ button{
 .pokemon-select option{
   background:#ffffff;
   color:#000000;
-
   font-weight:800;
 }
 
@@ -158,7 +152,6 @@ button{
   content:"▼";
 
   position:absolute;
-
   right:13px;
   top:50%;
 
@@ -190,13 +183,11 @@ button{
   font-weight:900;
 
   cursor:pointer;
-
   touch-action:manipulation;
 }
 
 .reset:active{
   transform:scale(.96);
-
   background:#212c3a;
 }
 
@@ -254,7 +245,6 @@ button{
 
 .digital-header{
   width:100%;
-
   flex:0 0 auto;
 
   padding:1px 5px 0;
@@ -279,7 +269,6 @@ button{
 .status-area{
   display:flex;
   align-items:center;
-
   gap:4px;
 }
 
@@ -294,9 +283,6 @@ button{
 
 /* =========================
    ダイヤルエリア
-
-   進化ボタンを置くために
-   position:relative
 ========================= */
 
 .dial-area{
@@ -346,7 +332,6 @@ button{
   height:100%;
 
   display:block;
-
   overflow:visible;
 
   user-select:none;
@@ -357,7 +342,7 @@ button{
 }
 
 /* =========================
-   円外装
+   円
 ========================= */
 
 .outer-case{
@@ -414,7 +399,7 @@ button{
 }
 
 /* =========================
-   HP
+   HP表示
 ========================= */
 
 .dial-hp-label{
@@ -494,7 +479,6 @@ button{
 
 .scale-line.major{
   stroke:#8d9bad;
-
   stroke-width:4;
 }
 
@@ -544,20 +528,17 @@ button{
 
 /* =========================
    進化ボタン
-
-   重要：
-   dial-containerの外、
-   dial-areaの中に置く。
-
-   HPダイヤルのPointer操作と
-   進化ボタン操作を分離。
+   HPリングの右下・円の外側
 ========================= */
 
 .evolution-button{
   position:absolute;
 
-  right:0;
-  bottom:12px;
+  /*
+    円の右下・外側へ配置
+  */
+  right:-10px;
+  bottom:-4px;
 
   z-index:50;
 
@@ -586,7 +567,6 @@ button{
   cursor:pointer;
 
   touch-action:manipulation;
-
   pointer-events:auto;
 }
 
@@ -607,6 +587,64 @@ button{
   display:none;
 }
 
+
+/* =========================
+   高さ700px以下
+========================= */
+
+@media(max-height:700px){
+
+  .evolution-button{
+    right:-7px;
+    bottom:-2px;
+
+    width:52px;
+    height:52px;
+
+    font-size:13px;
+  }
+
+}
+
+
+/* =========================
+   高さ600px以下
+========================= */
+
+@media(max-height:600px){
+
+  .evolution-button{
+    right:-5px;
+    bottom:0;
+
+    width:46px;
+    height:46px;
+
+    border-width:2px;
+
+    font-size:11px;
+  }
+
+}
+
+
+/* =========================
+   高さ520px以下
+========================= */
+
+@media(max-height:520px){
+
+  .evolution-button{
+    right:-3px;
+    bottom:2px;
+
+    width:40px;
+    height:40px;
+
+    font-size:10px;
+  }
+
+}
 /* =========================
    操作説明
 ========================= */
@@ -639,7 +677,6 @@ button{
 
 .limit-indicator{
   width:100%;
-
   flex:0 0 auto;
 
   padding:3px 6px 1px;
@@ -722,7 +759,6 @@ button{
 
 .evolution-text{
   position:relative;
-
   z-index:4;
 
   padding:12px 22px;
@@ -886,11 +922,13 @@ button{
 
   20%{
     opacity:.15;
+
     stroke:#ffffff;
   }
 
   40%{
     opacity:1;
+
     stroke:#22c55e;
   }
 
@@ -908,22 +946,27 @@ button{
 
   0%{
     opacity:1;
+
     transform:scale(1);
+
     transform-origin:center;
   }
 
   25%{
     opacity:0;
+
     transform:scale(.55);
   }
 
   55%{
     opacity:1;
+
     transform:scale(1.2);
   }
 
   100%{
     opacity:1;
+
     transform:scale(1);
   }
 
@@ -952,12 +995,17 @@ button{
     );
   }
 
+  /*
+    小さくなっても
+    中央円右下を維持
+  */
+
   .evolution-button{
+    right:20%;
+    bottom:20%;
+
     width:52px;
     height:52px;
-
-    right:0;
-    bottom:9px;
 
     font-size:13px;
   }
@@ -1008,11 +1056,11 @@ button{
   }
 
   .evolution-button{
+    right:19%;
+    bottom:19%;
+
     width:46px;
     height:46px;
-
-    right:0;
-    bottom:7px;
 
     border-width:2px;
 
@@ -1040,10 +1088,11 @@ button{
   }
 
   .evolution-button{
-    width:42px;
-    height:42px;
+    right:18%;
+    bottom:18%;
 
-    bottom:4px;
+    width:40px;
+    height:40px;
 
     font-size:10px;
   }
@@ -1066,10 +1115,6 @@ button{
 <body>
 
 <div class="app">
-
-  <!-- =========================
-       ポケモン選択＋RESET
-  ========================== -->
 
   <div class="top-control">
 
@@ -1121,19 +1166,6 @@ button{
         </span>
 
       </div>
-
-      <!-- =========================
-           ダイヤル全体
-
-           dial-area：
-           配置のみ担当
-
-           dial-container：
-           HP操作のみ担当
-
-           進化ボタン：
-           dial-containerの外
-      ========================== -->
 
       <div class="dial-area">
 
@@ -1266,11 +1298,6 @@ button{
 
         </div>
 
-        <!--
-          進化ボタンは
-          dialContainerの外に配置。
-        -->
-
         <button
           id="evolutionButton"
           class="evolution-button"
@@ -1301,10 +1328,6 @@ button{
         </span>
 
       </div>
-
-      <!-- =========================
-           進化演出
-      ========================== -->
 
       <div
         id="evolutionOverlay"
@@ -1341,66 +1364,27 @@ button{
 const evolutionData = {
 
   "ヒトカゲ":[
-
-    {
-      name:"ヒトカゲ",
-      maxHp:120
-    },
-
-    {
-      name:"リザード",
-      maxHp:150
-    },
-
-    {
-      name:"リザードン",
-      maxHp:180
-    }
-
+    {name:"ヒトカゲ",maxHp:120},
+    {name:"リザード",maxHp:150},
+    {name:"リザードン",maxHp:180}
   ],
 
   "フシギダネ":[
-
-    {
-      name:"フシギダネ",
-      maxHp:120
-    },
-
-    {
-      name:"フシギソウ",
-      maxHp:150
-    },
-
-    {
-      name:"フシギバナ",
-      maxHp:180
-    }
-
+    {name:"フシギダネ",maxHp:120},
+    {name:"フシギソウ",maxHp:150},
+    {name:"フシギバナ",maxHp:180}
   ],
 
   "ゼニガメ":[
-
-    {
-      name:"ゼニガメ",
-      maxHp:120
-    },
-
-    {
-      name:"カメール",
-      maxHp:150
-    },
-
-    {
-      name:"カメックス",
-      maxHp:180
-    }
-
+    {name:"ゼニガメ",maxHp:120},
+    {name:"カメール",maxHp:150},
+    {name:"カメックス",maxHp:180}
   ]
 
 };
 
 /* =========================
-   ポケモン一覧
+   ポケモン
 ========================= */
 
 const pokemonData = [
@@ -1437,45 +1421,31 @@ const BASE_MAX_HP = 120;
 const MIN_HP = 0;
 const HP_STEP = 10;
 
-let hp =
-  BASE_MAX_HP;
+let hp = BASE_MAX_HP;
+let maxHp = BASE_MAX_HP;
 
-let maxHp =
-  BASE_MAX_HP;
+let selectedBasePokemon = "";
 
-let selectedBasePokemon =
-  "";
+let evolutionStage = 0;
 
-let evolutionStage =
-  0;
-
-let isEvolving =
-  false;
+let isEvolving = false;
 
 /* =========================
    ダイヤル
 ========================= */
 
-let isDragging =
-  false;
+let isDragging = false;
 
-let previousPointerAngle =
-  null;
+let previousPointerAngle = null;
 
-let accumulatedAngle =
-  0;
+let accumulatedAngle = 0;
 
-let pointerStartX =
-  0;
+let pointerStartX = 0;
+let pointerStartY = 0;
 
-let pointerStartY =
-  0;
+let pointerMoved = false;
 
-let pointerMoved =
-  false;
-
-const TAP_MOVE_THRESHOLD =
-  8;
+const TAP_MOVE_THRESHOLD = 8;
 
 /* =========================
    円
@@ -1489,19 +1459,12 @@ const DIAL_RADIUS = 137;
 const HANDLE_RADIUS =
   DIAL_RADIUS;
 
-const SCALE_INNER_RADIUS =
-  153;
-
-const SCALE_OUTER_RADIUS =
-  161;
-
-const LABEL_RADIUS =
-  169;
+const SCALE_INNER_RADIUS = 153;
+const SCALE_OUTER_RADIUS = 161;
+const LABEL_RADIUS = 169;
 
 const CIRCUMFERENCE =
-  2 *
-  Math.PI *
-  DIAL_RADIUS;
+  2 * Math.PI * DIAL_RADIUS;
 
 /* =========================
    DOM
@@ -1598,7 +1561,7 @@ const monitorName =
   );
 
 /* =========================
-   実表示高さ
+   スマホ実表示高さ
 ========================= */
 
 function updateAppHeight(){
@@ -1616,13 +1579,8 @@ function updateAppHeight(){
 
   }
 
-  /*
-    下端用に6px余裕を持たせる
-  */
-
   height =
-    Math.floor(height) -
-    6;
+    Math.floor(height) - 6;
 
   height =
     Math.max(
@@ -1691,11 +1649,8 @@ pokemonData.forEach(
         "option"
       );
 
-    option.value =
-      name;
-
-    option.textContent =
-      name;
+    option.value = name;
+    option.textContent = name;
 
     pokemonSelect.appendChild(
       option
@@ -1705,7 +1660,7 @@ pokemonData.forEach(
 );
 
 /* =========================
-   進化情報
+   進化関係
 ========================= */
 
 function getEvolutionLine(){
@@ -1745,10 +1700,6 @@ function hasNextEvolution(){
   );
 
 }
-
-/* =========================
-   選択欄の名前
-========================= */
 
 function restoreEvolutionOptionNames(){
 
@@ -1792,22 +1743,16 @@ function updateSelectedOptionText(){
 
 }
 
-/* =========================
-   進化ボタン
-========================= */
-
 function renderEvolutionButton(){
 
   const show =
     hasNextEvolution() &&
     !isEvolving;
 
-  evolutionButton
-    .classList
-    .toggle(
-      "show",
-      show
-    );
+  evolutionButton.classList.toggle(
+    "show",
+    show
+  );
 
   evolutionButton.disabled =
     !show;
@@ -1815,7 +1760,7 @@ function renderEvolutionButton(){
 }
 
 /* =========================
-   円座標
+   座標
 ========================= */
 
 function polarToCartesian(
@@ -1826,33 +1771,23 @@ function polarToCartesian(
 ){
 
   const radians =
-    angle *
-    Math.PI /
-    180;
+    angle * Math.PI / 180;
 
   return {
 
     x:
       centerX +
       radius *
-      Math.cos(
-        radians
-      ),
+      Math.cos(radians),
 
     y:
       centerY +
       radius *
-      Math.sin(
-        radians
-      )
+      Math.sin(radians)
 
   };
 
 }
-
-/* =========================
-   10HPの角度
-========================= */
 
 function getDegreesPerStep(){
 
@@ -1864,13 +1799,7 @@ function getDegreesPerStep(){
 
 }
 
-/* =========================
-   HP → 角度
-========================= */
-
-function hpToAngle(
-  value
-){
+function hpToAngle(value){
 
   return -90 +
     (
@@ -1880,10 +1809,6 @@ function hpToAngle(
     360;
 
 }
-
-/* =========================
-   HP色
-========================= */
 
 function getHpColor(){
 
@@ -1909,11 +1834,8 @@ function getHpColor(){
 
 function createDialScale(){
 
-  scaleLines.innerHTML =
-    "";
-
-  scaleLabels.innerHTML =
-    "";
+  scaleLines.innerHTML = "";
+  scaleLabels.innerHTML = "";
 
   for(
     let value = 0;
@@ -1930,9 +1852,7 @@ function createDialScale(){
       360;
 
     const isMajor =
-      value %
-      30 ===
-      0;
+      value % 30 === 0;
 
     const inner =
       isMajor
@@ -2089,10 +2009,8 @@ function renderHP(){
 
   hpPercentEl.textContent =
     Math.round(
-      ratio *
-      100
-    ) +
-    "%";
+      ratio * 100
+    ) + "%";
 
   maxHpLabel.textContent =
     maxHp;
@@ -2192,7 +2110,7 @@ function renderHP(){
 }
 
 /* =========================
-   全描画
+   全体描画
 ========================= */
 
 function renderAll(){
@@ -2216,13 +2134,10 @@ function renderAll(){
    ポインター位置
 ========================= */
 
-function getPointerPosition(
-  event
-){
+function getPointerPosition(event){
 
   const rect =
-    hpDial
-      .getBoundingClientRect();
+    hpDial.getBoundingClientRect();
 
   return {
 
@@ -2250,9 +2165,7 @@ function getPointerPosition(
 
 }
 
-function getPointerAngle(
-  event
-){
+function getPointerAngle(event){
 
   const point =
     getPointerPosition(
@@ -2272,12 +2185,10 @@ function getPointerAngle(
 }
 
 /* =========================
-   タップでHP移動
+   タップジャンプ
 ========================= */
 
-function jumpToTappedHp(
-  event
-){
+function jumpToTappedHp(event){
 
   if(isEvolving){
 
@@ -2324,23 +2235,16 @@ function jumpToTappedHp(
     Math.PI;
 
   let clockwiseAngle =
-    angle +
-    90;
+    angle + 90;
 
-  if(
-    clockwiseAngle <
-    0
-  ){
+  if(clockwiseAngle < 0){
 
     clockwiseAngle +=
       360;
 
   }
 
-  if(
-    clockwiseAngle >=
-    360
-  ){
+  if(clockwiseAngle >= 360){
 
     clockwiseAngle -=
       360;
@@ -2360,13 +2264,9 @@ function jumpToTappedHp(
     maxHp /
     HP_STEP;
 
-  if(
-    step >=
-    totalSteps
-  ){
+  if(step >= totalSteps){
 
-    step =
-      0;
+    step = 0;
 
   }
 
@@ -2374,10 +2274,7 @@ function jumpToTappedHp(
     step *
     HP_STEP;
 
-  if(
-    step ===
-    0
-  ){
+  if(step === 0){
 
     nextHp =
       hp >=
@@ -2387,14 +2284,10 @@ function jumpToTappedHp(
 
   }
 
-  hp =
-    nextHp;
+  hp = nextHp;
 
-  accumulatedAngle =
-    0;
-
-  previousPointerAngle =
-    null;
+  accumulatedAngle = 0;
+  previousPointerAngle = null;
 
   renderHP();
 
@@ -2404,9 +2297,7 @@ function jumpToTappedHp(
    ドラッグ
 ========================= */
 
-function updateHpFromDrag(
-  event
-){
+function updateHpFromDrag(event){
 
   if(isEvolving){
 
@@ -2435,20 +2326,14 @@ function updateHpFromDrag(
     currentAngle -
     previousPointerAngle;
 
-  if(
-    difference >
-    180
-  ){
+  if(difference > 180){
 
     difference -=
       360;
 
   }
 
-  if(
-    difference <
-    -180
-  ){
+  if(difference < -180){
 
     difference +=
       360;
@@ -2466,16 +2351,12 @@ function updateHpFromDrag(
     stepAngle
   ){
 
-    if(
-      hp <
-      maxHp
-    ){
+    if(hp < maxHp){
 
       hp =
         Math.min(
           maxHp,
-          hp +
-          HP_STEP
+          hp + HP_STEP
         );
 
       renderHP();
@@ -2492,16 +2373,12 @@ function updateHpFromDrag(
     -stepAngle
   ){
 
-    if(
-      hp >
-      MIN_HP
-    ){
+    if(hp > MIN_HP){
 
       hp =
         Math.max(
           MIN_HP,
-          hp -
-          HP_STEP
+          hp - HP_STEP
         );
 
       renderHP();
@@ -2514,26 +2391,20 @@ function updateHpFromDrag(
   }
 
   if(
-    hp ===
-      maxHp &&
-    accumulatedAngle >
-      0
+    hp === maxHp &&
+    accumulatedAngle > 0
   ){
 
-    accumulatedAngle =
-      0;
+    accumulatedAngle = 0;
 
   }
 
   if(
-    hp ===
-      MIN_HP &&
-    accumulatedAngle <
-      0
+    hp === MIN_HP &&
+    accumulatedAngle < 0
   ){
 
-    accumulatedAngle =
-      0;
+    accumulatedAngle = 0;
 
   }
 
@@ -2558,11 +2429,8 @@ dialContainer.addEventListener(
 
     event.preventDefault();
 
-    isDragging =
-      true;
-
-    pointerMoved =
-      false;
+    isDragging = true;
+    pointerMoved = false;
 
     pointerStartX =
       event.clientX;
@@ -2575,14 +2443,11 @@ dialContainer.addEventListener(
         event
       );
 
-    accumulatedAngle =
-      0;
+    accumulatedAngle = 0;
 
-    dialContainer
-      .classList
-      .add(
-        "dragging"
-      );
+    dialContainer.classList.add(
+      "dragging"
+    );
 
     try{
 
@@ -2629,8 +2494,7 @@ dialContainer.addEventListener(
       TAP_MOVE_THRESHOLD
     ){
 
-      pointerMoved =
-        true;
+      pointerMoved = true;
 
     }
 
@@ -2666,23 +2530,15 @@ function finishPointer(
 
   }
 
-  isDragging =
-    false;
+  isDragging = false;
+  pointerMoved = false;
 
-  pointerMoved =
-    false;
+  previousPointerAngle = null;
+  accumulatedAngle = 0;
 
-  previousPointerAngle =
-    null;
-
-  accumulatedAngle =
-    0;
-
-  dialContainer
-    .classList
-    .remove(
-      "dragging"
-    );
+  dialContainer.classList.remove(
+    "dragging"
+  );
 
   try{
 
@@ -2739,6 +2595,63 @@ dialContainer.addEventListener(
 );
 
 /* =========================
+   キーボード
+========================= */
+
+dialContainer.addEventListener(
+  "keydown",
+  event => {
+
+    if(isEvolving){
+
+      return;
+
+    }
+
+    if(
+      event.key ===
+        "ArrowLeft" ||
+      event.key ===
+        "ArrowDown"
+    ){
+
+      event.preventDefault();
+
+      hp =
+        Math.max(
+          MIN_HP,
+          hp -
+          HP_STEP
+        );
+
+      renderHP();
+
+    }
+
+    if(
+      event.key ===
+        "ArrowRight" ||
+      event.key ===
+        "ArrowUp"
+    ){
+
+      event.preventDefault();
+
+      hp =
+        Math.min(
+          maxHp,
+          hp +
+          HP_STEP
+        );
+
+      renderHP();
+
+    }
+
+  }
+);
+
+/* =========================
    ポケモン変更
 ========================= */
 
@@ -2757,8 +2670,7 @@ pokemonSelect.addEventListener(
     selectedBasePokemon =
       pokemonSelect.value;
 
-    evolutionStage =
-      0;
+    evolutionStage = 0;
 
     maxHp =
       BASE_MAX_HP;
@@ -2766,11 +2678,8 @@ pokemonSelect.addEventListener(
     hp =
       BASE_MAX_HP;
 
-    previousPointerAngle =
-      null;
-
-    accumulatedAngle =
-      0;
+    previousPointerAngle = null;
+    accumulatedAngle = 0;
 
     renderAll();
 
@@ -2778,11 +2687,8 @@ pokemonSelect.addEventListener(
 );
 
 /* =========================
-   進化ボタン
-
-   pointerdownで
-   dialContainerへイベントが
-   行かないよう完全分離。
+   進化ボタン操作を
+   ダイヤルから完全分離
 ========================= */
 
 evolutionButton.addEventListener(
@@ -2790,12 +2696,6 @@ evolutionButton.addEventListener(
   event => {
 
     event.stopPropagation();
-
-    /*
-      ボタン操作を
-      ブラウザへ正常に残すため、
-      preventDefaultはしない。
-    */
 
   }
 );
@@ -2808,6 +2708,10 @@ evolutionButton.addEventListener(
 
   }
 );
+
+/* =========================
+   進化
+========================= */
 
 evolutionButton.addEventListener(
   "click",
@@ -2835,8 +2739,7 @@ evolutionButton.addEventListener(
     }
 
     const nextStage =
-      evolutionStage +
-      1;
+      evolutionStage + 1;
 
     if(
       nextStage >=
@@ -2853,61 +2756,47 @@ evolutionButton.addEventListener(
       ];
 
     /*
-      受けたダメージ量
+      現在受けている
+      ダメージ量を保存
     */
 
     const damage =
       maxHp -
       hp;
 
-    isEvolving =
-      true;
+    isEvolving = true;
 
     /*
-      他のダイヤル操作を終了
+      ダイヤル操作状態を終了
     */
 
-    isDragging =
-      false;
+    isDragging = false;
+    pointerMoved = false;
 
-    pointerMoved =
-      false;
+    previousPointerAngle = null;
+    accumulatedAngle = 0;
 
-    previousPointerAngle =
-      null;
-
-    accumulatedAngle =
-      0;
-
-    dialContainer
-      .classList
-      .remove(
-        "dragging"
-      );
+    dialContainer.classList.remove(
+      "dragging"
+    );
 
     evolutionButton.disabled =
       true;
 
-    evolutionButton
-      .classList
-      .remove(
-        "show"
-      );
+    evolutionButton.classList.remove(
+      "show"
+    );
 
     evolutionText.textContent =
       "EVOLUTION";
 
-    evolutionOverlay
-      .classList
-      .add(
-        "active"
-      );
+    evolutionOverlay.classList.add(
+      "active"
+    );
 
-    digitalUnit
-      .classList
-      .add(
-        "evolving"
-      );
+    digitalUnit.classList.add(
+      "evolving"
+    );
 
     /*
       演出途中で進化
@@ -2956,20 +2845,15 @@ evolutionButton.addEventListener(
     window.setTimeout(
       () => {
 
-        evolutionOverlay
-          .classList
-          .remove(
-            "active"
-          );
+        evolutionOverlay.classList.remove(
+          "active"
+        );
 
-        digitalUnit
-          .classList
-          .remove(
-            "evolving"
-          );
+        digitalUnit.classList.remove(
+          "evolving"
+        );
 
-        isEvolving =
-          false;
+        isEvolving = false;
 
         renderEvolutionButton();
 
@@ -3015,8 +2899,7 @@ resetBtn.addEventListener(
     selectedBasePokemon =
       selected;
 
-    evolutionStage =
-      0;
+    evolutionStage = 0;
 
     maxHp =
       BASE_MAX_HP;
@@ -3024,17 +2907,11 @@ resetBtn.addEventListener(
     hp =
       BASE_MAX_HP;
 
-    isDragging =
-      false;
+    isDragging = false;
+    pointerMoved = false;
 
-    pointerMoved =
-      false;
-
-    previousPointerAngle =
-      null;
-
-    accumulatedAngle =
-      0;
+    previousPointerAngle = null;
+    accumulatedAngle = 0;
 
     renderAll();
 
@@ -3042,7 +2919,7 @@ resetBtn.addEventListener(
 );
 
 /* =========================
-   ページスクロール停止
+   スクロール防止
 ========================= */
 
 document.addEventListener(
@@ -3066,7 +2943,7 @@ document.addEventListener(
 );
 
 /* =========================
-   初期表示
+   初期化
 ========================= */
 
 updateAppHeight();
