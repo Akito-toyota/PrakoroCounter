@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
@@ -31,7 +30,6 @@ html,
 body{
   width:100%;
   height:100%;
-
   margin:0;
   padding:0;
 
@@ -87,7 +85,7 @@ button{
   padding:
     max(4px,env(safe-area-inset-top))
     6px
-    max(4px,env(safe-area-inset-bottom));
+    max(6px,env(safe-area-inset-bottom));
 
   display:flex;
   flex-direction:column;
@@ -98,8 +96,7 @@ button{
 }
 
 /* =========================
-   最上段
-   ポケモン選択＋RESET
+   上部操作
 ========================= */
 
 .top-control{
@@ -116,7 +113,6 @@ button{
 
 .select-frame{
   min-width:0;
-
   position:relative;
 }
 
@@ -146,8 +142,6 @@ button{
   cursor:pointer;
   touch-action:manipulation;
 }
-
-/* 開いたプルダウン */
 
 .pokemon-select option{
   background:#ffffff;
@@ -206,14 +200,6 @@ button{
   background:#212c3a;
 }
 
-.reset:focus-visible,
-.pokemon-select:focus-visible,
-.dial-container:focus-visible,
-.evolution-button:focus-visible{
-  outline:3px solid var(--green);
-  outline-offset:2px;
-}
-
 /* =========================
    メイン
 ========================= */
@@ -266,12 +252,9 @@ button{
   position:relative;
 }
 
-/* =========================
-   モニターヘッダー
-========================= */
-
 .digital-header{
   width:100%;
+
   flex:0 0 auto;
 
   padding:1px 5px 0;
@@ -310,13 +293,13 @@ button{
 }
 
 /* =========================
-   HPダイヤル
+   ダイヤルエリア
 
-   ヘッダーを削除したので
-   画面内に余裕を持って収める
+   進化ボタンを置くために
+   position:relative
 ========================= */
 
-.dial-container{
+.dial-area{
   width:min(
     86vw,
     calc(var(--app-height) * .54),
@@ -331,6 +314,17 @@ button{
   flex:0 1 auto;
 
   margin:0 auto;
+
+  position:relative;
+}
+
+/* =========================
+   ダイヤル操作領域
+========================= */
+
+.dial-container{
+  width:100%;
+  height:100%;
 
   position:relative;
 
@@ -420,7 +414,7 @@ button{
 }
 
 /* =========================
-   HP表示
+   HP
 ========================= */
 
 .dial-hp-label{
@@ -521,7 +515,7 @@ button{
 }
 
 /* =========================
-   操作ノブ
+   ノブ
 ========================= */
 
 .dial-handle{
@@ -551,16 +545,21 @@ button{
 /* =========================
    進化ボタン
 
-   ダイヤル自体を基準に配置
+   重要：
+   dial-containerの外、
+   dial-areaの中に置く。
+
+   HPダイヤルのPointer操作と
+   進化ボタン操作を分離。
 ========================= */
 
 .evolution-button{
   position:absolute;
 
-  right:-2px;
+  right:0;
   bottom:12px;
 
-  z-index:10;
+  z-index:50;
 
   width:58px;
   height:58px;
@@ -579,7 +578,7 @@ button{
 
   box-shadow:
     0 4px 0 #075d2b,
-    0 6px 10px rgba(0,0,0,.4);
+    0 6px 10px rgba(0,0,0,.45);
 
   font-size:14px;
   font-weight:950;
@@ -587,6 +586,8 @@ button{
   cursor:pointer;
 
   touch-action:manipulation;
+
+  pointer-events:auto;
 }
 
 .evolution-button.show{
@@ -596,7 +597,7 @@ button{
 .evolution-button:active{
   transform:
     translateY(3px)
-    scale(.96);
+    scale(.95);
 
   box-shadow:
     0 1px 0 #075d2b;
@@ -638,6 +639,7 @@ button{
 
 .limit-indicator{
   width:100%;
+
   flex:0 0 auto;
 
   padding:3px 6px 1px;
@@ -671,7 +673,7 @@ button{
   position:absolute;
   inset:0;
 
-  z-index:20;
+  z-index:100;
 
   display:none;
   align-items:center;
@@ -689,9 +691,7 @@ button{
 
   animation:
     evolutionBackground
-    1.5s
-    ease
-    both;
+    1.5s ease both;
 }
 
 .evolution-flash{
@@ -706,13 +706,10 @@ button{
   opacity:0;
 }
 
-.evolution-overlay.active
-.evolution-flash{
+.evolution-overlay.active .evolution-flash{
   animation:
     evolutionRing
-    1.35s
-    ease-out
-    both;
+    1.35s ease-out both;
 }
 
 .evolution-flash.second{
@@ -725,6 +722,7 @@ button{
 
 .evolution-text{
   position:relative;
+
   z-index:4;
 
   padding:12px 22px;
@@ -750,36 +748,28 @@ button{
     0 0 12px #22c55e;
 }
 
-.evolution-overlay.active
-.evolution-text{
+.evolution-overlay.active .evolution-text{
   animation:
     evolutionText
-    1.5s
-    ease
-    both;
+    1.5s ease both;
 }
 
 .digital-unit.evolving{
   animation:
     monitorEvolution
-    1.5s
-    ease;
+    1.5s ease;
 }
 
-.digital-unit.evolving
-.dial-progress{
+.digital-unit.evolving .dial-progress{
   animation:
     gaugeEvolution
-    1.5s
-    ease;
+    1.5s ease;
 }
 
-.digital-unit.evolving
-.dial-hp-value{
+.digital-unit.evolving .dial-hp-value{
   animation:
     numberEvolution
-    1.5s
-    ease;
+    1.5s ease;
 }
 
 @keyframes evolutionBackground{
@@ -896,13 +886,11 @@ button{
 
   20%{
     opacity:.15;
-
     stroke:#ffffff;
   }
 
   40%{
     opacity:1;
-
     stroke:#22c55e;
   }
 
@@ -920,47 +908,32 @@ button{
 
   0%{
     opacity:1;
-
     transform:scale(1);
-
     transform-origin:center;
   }
 
   25%{
     opacity:0;
-
     transform:scale(.55);
   }
 
   55%{
     opacity:1;
-
     transform:scale(1.2);
   }
 
   100%{
     opacity:1;
-
     transform:scale(1);
   }
 
 }
 
 /* =========================
-   高さが低いスマホ
+   高さ700以下
 ========================= */
 
 @media(max-height:700px){
-
-  .app{
-    padding-top:
-      max(3px,env(safe-area-inset-top));
-
-    padding-bottom:
-      max(3px,env(safe-area-inset-bottom));
-
-    gap:3px;
-  }
 
   .pokemon-select,
   .reset{
@@ -971,7 +944,7 @@ button{
     font-size:17px;
   }
 
-  .dial-container{
+  .dial-area{
     width:min(
       84vw,
       calc(var(--app-height) * .50),
@@ -980,19 +953,17 @@ button{
   }
 
   .evolution-button{
-    right:-1px;
-    bottom:10px;
-
     width:52px;
     height:52px;
+
+    right:0;
+    bottom:9px;
 
     font-size:13px;
   }
 
   .dial-guide{
     margin-top:-7px;
-
-    padding:1px 4px;
 
     font-size:8px;
   }
@@ -1006,18 +977,10 @@ button{
 }
 
 /* =========================
-   さらに高さが低いスマホ
+   高さ600以下
 ========================= */
 
 @media(max-height:600px){
-
-  .app{
-    padding-top:
-      max(2px,env(safe-area-inset-top));
-
-    padding-bottom:
-      max(2px,env(safe-area-inset-bottom));
-  }
 
   .pokemon-select,
   .reset{
@@ -1036,7 +999,7 @@ button{
     padding:2px;
   }
 
-  .dial-container{
+  .dial-area{
     width:min(
       82vw,
       calc(var(--app-height) * .46),
@@ -1045,11 +1008,11 @@ button{
   }
 
   .evolution-button{
-    right:0;
-    bottom:8px;
-
     width:46px;
     height:46px;
+
+    right:0;
+    bottom:7px;
 
     border-width:2px;
 
@@ -1063,12 +1026,12 @@ button{
 }
 
 /* =========================
-   極端に高さが低い場合
+   高さ520以下
 ========================= */
 
 @media(max-height:520px){
 
-  .dial-container{
+  .dial-area{
     width:min(
       80vw,
       calc(var(--app-height) * .43),
@@ -1076,15 +1039,11 @@ button{
     );
   }
 
-  .limit-indicator{
-    padding-top:1px;
-  }
-
   .evolution-button{
     width:42px;
     height:42px;
 
-    bottom:5px;
+    bottom:4px;
 
     font-size:10px;
   }
@@ -1109,7 +1068,6 @@ button{
 <div class="app">
 
   <!-- =========================
-       最上段
        ポケモン選択＋RESET
   ========================== -->
 
@@ -1165,142 +1123,159 @@ button{
       </div>
 
       <!-- =========================
-           ダイヤル
-           進化ボタンもこの中
+           ダイヤル全体
+
+           dial-area：
+           配置のみ担当
+
+           dial-container：
+           HP操作のみ担当
+
+           進化ボタン：
+           dial-containerの外
       ========================== -->
 
-      <div
-        id="dialContainer"
-        class="dial-container"
-        role="slider"
-        aria-label="HP"
-        aria-valuemin="0"
-        aria-valuemax="120"
-        aria-valuenow="120"
-        aria-valuetext="HP 120"
-        tabindex="0"
-      >
+      <div class="dial-area">
 
-        <svg
-          id="hpDial"
-          class="hp-dial"
-          viewBox="0 0 360 360"
-          aria-hidden="true"
+        <div
+          id="dialContainer"
+          class="dial-container"
+          role="slider"
+          aria-label="HP"
+          aria-valuemin="0"
+          aria-valuemax="120"
+          aria-valuenow="120"
+          aria-valuetext="HP 120"
+          tabindex="0"
         >
 
-          <circle
-            class="outer-case"
-            cx="180"
-            cy="180"
-            r="167"
-          ></circle>
-
-          <circle
-            class="outer-case-detail"
-            cx="180"
-            cy="180"
-            r="153"
-          ></circle>
-
-          <circle
-            class="dial-track"
-            cx="180"
-            cy="180"
-            r="137"
-          ></circle>
-
-          <circle
-            id="dialProgress"
-            class="dial-progress"
-            cx="180"
-            cy="180"
-            r="137"
-          ></circle>
-
-          <g id="scaleLines"></g>
-
-          <g id="scaleLabels"></g>
-
-          <circle
-            class="dial-center"
-            cx="180"
-            cy="180"
-            r="96"
-          ></circle>
-
-          <circle
-            class="dial-center-inner"
-            cx="180"
-            cy="180"
-            r="87"
-          ></circle>
-
-          <text
-            class="dial-hp-label"
-            x="180"
-            y="140"
+          <svg
+            id="hpDial"
+            class="hp-dial"
+            viewBox="0 0 360 360"
+            aria-hidden="true"
           >
-            HP
-          </text>
 
-          <text
-            id="hpValue"
-            class="dial-hp-value"
-            x="180"
-            y="218"
-          >
-            120
-          </text>
+            <circle
+              class="outer-case"
+              cx="180"
+              cy="180"
+              r="167"
+            ></circle>
 
-          <text
-            class="dial-unit-label"
-            x="180"
-            y="243"
-          >
-            LIFE POINT
-          </text>
+            <circle
+              class="outer-case-detail"
+              cx="180"
+              cy="180"
+              r="153"
+            ></circle>
 
-          <text
-            id="hpPercent"
-            class="dial-percent"
-            x="180"
-            y="268"
-          >
-            100%
-          </text>
+            <circle
+              class="dial-track"
+              cx="180"
+              cy="180"
+              r="137"
+            ></circle>
 
-          <circle
-            id="dialHandle"
-            class="dial-handle"
-            cx="180"
-            cy="43"
-            r="16"
-          ></circle>
+            <circle
+              id="dialProgress"
+              class="dial-progress"
+              cx="180"
+              cy="180"
+              r="137"
+            ></circle>
 
-          <circle
-            id="handleCenter"
-            class="handle-center"
-            cx="180"
-            cy="43"
-            r="6"
-          ></circle>
+            <g id="scaleLines"></g>
 
-          <line
-            id="handleLine"
-            class="handle-line"
-            x1="180"
-            y1="39"
-            x2="180"
-            y2="47"
-          ></line>
+            <g id="scaleLabels"></g>
 
-        </svg>
+            <circle
+              class="dial-center"
+              cx="180"
+              cy="180"
+              r="96"
+            ></circle>
+
+            <circle
+              class="dial-center-inner"
+              cx="180"
+              cy="180"
+              r="87"
+            ></circle>
+
+            <text
+              class="dial-hp-label"
+              x="180"
+              y="140"
+            >
+              HP
+            </text>
+
+            <text
+              id="hpValue"
+              class="dial-hp-value"
+              x="180"
+              y="218"
+            >
+              120
+            </text>
+
+            <text
+              class="dial-unit-label"
+              x="180"
+              y="243"
+            >
+              LIFE POINT
+            </text>
+
+            <text
+              id="hpPercent"
+              class="dial-percent"
+              x="180"
+              y="268"
+            >
+              100%
+            </text>
+
+            <circle
+              id="dialHandle"
+              class="dial-handle"
+              cx="180"
+              cy="43"
+              r="16"
+            ></circle>
+
+            <circle
+              id="handleCenter"
+              class="handle-center"
+              cx="180"
+              cy="43"
+              r="6"
+            ></circle>
+
+            <line
+              id="handleLine"
+              class="handle-line"
+              x1="180"
+              y1="39"
+              x2="180"
+              y2="47"
+            ></line>
+
+          </svg>
+
+        </div>
+
+        <!--
+          進化ボタンは
+          dialContainerの外に配置。
+        -->
 
         <button
           id="evolutionButton"
           class="evolution-button"
           type="button"
-          aria-label="進化"
+          aria-label="ポケモンを進化"
         >
           進化
         </button>
@@ -1338,7 +1313,9 @@ button{
       >
 
         <div class="evolution-flash"></div>
+
         <div class="evolution-flash second"></div>
+
         <div class="evolution-flash third"></div>
 
         <div
@@ -1364,48 +1341,60 @@ button{
 const evolutionData = {
 
   "ヒトカゲ":[
+
     {
       name:"ヒトカゲ",
       maxHp:120
     },
+
     {
       name:"リザード",
       maxHp:150
     },
+
     {
       name:"リザードン",
       maxHp:180
     }
+
   ],
 
   "フシギダネ":[
+
     {
       name:"フシギダネ",
       maxHp:120
     },
+
     {
       name:"フシギソウ",
       maxHp:150
     },
+
     {
       name:"フシギバナ",
       maxHp:180
     }
+
   ],
 
   "ゼニガメ":[
+
     {
       name:"ゼニガメ",
       maxHp:120
     },
+
     {
       name:"カメール",
       maxHp:150
     },
+
     {
       name:"カメックス",
       maxHp:180
     }
+
   ]
 
 };
@@ -1464,7 +1453,7 @@ let isEvolving =
   false;
 
 /* =========================
-   ダイヤル状態
+   ダイヤル
 ========================= */
 
 let isDragging =
@@ -1609,7 +1598,7 @@ const monitorName =
   );
 
 /* =========================
-   スマホ実表示高さ
+   実表示高さ
 ========================= */
 
 function updateAppHeight(){
@@ -1628,12 +1617,12 @@ function updateAppHeight(){
   }
 
   /*
-    数px安全側へ寄せる。
-    ブラウザ下端での見切れ防止。
+    下端用に6px余裕を持たせる
   */
 
   height =
-    Math.floor(height) - 4;
+    Math.floor(height) -
+    6;
 
   height =
     Math.max(
@@ -1663,12 +1652,12 @@ window.addEventListener(
 
     updateAppHeight();
 
-    window.setTimeout(
+    setTimeout(
       updateAppHeight,
       100
     );
 
-    window.setTimeout(
+    setTimeout(
       updateAppHeight,
       350
     );
@@ -1691,7 +1680,7 @@ if(window.visualViewport){
 }
 
 /* =========================
-   ポケモン一覧生成
+   ポケモン一覧
 ========================= */
 
 pokemonData.forEach(
@@ -1758,7 +1747,7 @@ function hasNextEvolution(){
 }
 
 /* =========================
-   選択欄表示名
+   選択欄の名前
 ========================= */
 
 function restoreEvolutionOptionNames(){
@@ -1862,7 +1851,7 @@ function polarToCartesian(
 }
 
 /* =========================
-   10HPあたり角度
+   10HPの角度
 ========================= */
 
 function getDegreesPerStep(){
@@ -2203,7 +2192,7 @@ function renderHP(){
 }
 
 /* =========================
-   全体描画
+   全描画
 ========================= */
 
 function renderAll(){
@@ -2224,7 +2213,7 @@ function renderAll(){
 }
 
 /* =========================
-   ポインター座標
+   ポインター位置
 ========================= */
 
 function getPointerPosition(
@@ -2315,10 +2304,6 @@ function jumpToTappedHp(
       dy * dy
     );
 
-  /*
-    リング付近のみ有効
-  */
-
   if(
     distance <
       DIAL_RADIUS - 45 ||
@@ -2388,10 +2373,6 @@ function jumpToTappedHp(
   let nextHp =
     step *
     HP_STEP;
-
-  /*
-    上端は0と最大HPが同じ場所。
-  */
 
   if(
     step ===
@@ -2480,10 +2461,6 @@ function updateHpFromDrag(
   const stepAngle =
     getDegreesPerStep();
 
-  /*
-    時計回り +10
-  */
-
   while(
     accumulatedAngle >=
     stepAngle
@@ -2510,10 +2487,6 @@ function updateHpFromDrag(
 
   }
 
-  /*
-    反時計回り -10
-  */
-
   while(
     accumulatedAngle <=
     -stepAngle
@@ -2539,11 +2512,6 @@ function updateHpFromDrag(
       stepAngle;
 
   }
-
-  /*
-    0と最大HPを
-    ドラッグで跨がない
-  */
 
   if(
     hp ===
@@ -2575,7 +2543,7 @@ function updateHpFromDrag(
 }
 
 /* =========================
-   pointerdown
+   ダイヤル操作
 ========================= */
 
 dialContainer.addEventListener(
@@ -2610,9 +2578,11 @@ dialContainer.addEventListener(
     accumulatedAngle =
       0;
 
-    dialContainer.classList.add(
-      "dragging"
-    );
+    dialContainer
+      .classList
+      .add(
+        "dragging"
+      );
 
     try{
 
@@ -2624,10 +2594,6 @@ dialContainer.addEventListener(
 
   }
 );
-
-/* =========================
-   pointermove
-========================= */
 
 dialContainer.addEventListener(
   "pointermove",
@@ -2682,10 +2648,6 @@ dialContainer.addEventListener(
   }
 );
 
-/* =========================
-   操作終了
-========================= */
-
 function finishPointer(
   event,
   allowTap
@@ -2716,9 +2678,11 @@ function finishPointer(
   accumulatedAngle =
     0;
 
-  dialContainer.classList.remove(
-    "dragging"
-  );
+  dialContainer
+    .classList
+    .remove(
+      "dragging"
+    );
 
   try{
 
@@ -2762,10 +2726,6 @@ dialContainer.addEventListener(
   }
 );
 
-/* =========================
-   タッチスクロール停止
-========================= */
-
 dialContainer.addEventListener(
   "touchmove",
   event => {
@@ -2775,63 +2735,6 @@ dialContainer.addEventListener(
   },
   {
     passive:false
-  }
-);
-
-/* =========================
-   キーボード
-========================= */
-
-dialContainer.addEventListener(
-  "keydown",
-  event => {
-
-    if(isEvolving){
-
-      return;
-
-    }
-
-    if(
-      event.key ===
-        "ArrowLeft" ||
-      event.key ===
-        "ArrowDown"
-    ){
-
-      event.preventDefault();
-
-      hp =
-        Math.max(
-          MIN_HP,
-          hp -
-          HP_STEP
-        );
-
-      renderHP();
-
-    }
-
-    if(
-      event.key ===
-        "ArrowRight" ||
-      event.key ===
-        "ArrowUp"
-    ){
-
-      event.preventDefault();
-
-      hp =
-        Math.min(
-          maxHp,
-          hp +
-          HP_STEP
-        );
-
-      renderHP();
-
-    }
-
   }
 );
 
@@ -2875,13 +2778,42 @@ pokemonSelect.addEventListener(
 );
 
 /* =========================
-   進化
+   進化ボタン
+
+   pointerdownで
+   dialContainerへイベントが
+   行かないよう完全分離。
 ========================= */
+
+evolutionButton.addEventListener(
+  "pointerdown",
+  event => {
+
+    event.stopPropagation();
+
+    /*
+      ボタン操作を
+      ブラウザへ正常に残すため、
+      preventDefaultはしない。
+    */
+
+  }
+);
+
+evolutionButton.addEventListener(
+  "pointerup",
+  event => {
+
+    event.stopPropagation();
+
+  }
+);
 
 evolutionButton.addEventListener(
   "click",
   event => {
 
+    event.preventDefault();
     event.stopPropagation();
 
     if(
@@ -2896,9 +2828,24 @@ evolutionButton.addEventListener(
     const line =
       getEvolutionLine();
 
+    if(!line){
+
+      return;
+
+    }
+
     const nextStage =
       evolutionStage +
       1;
+
+    if(
+      nextStage >=
+      line.length
+    ){
+
+      return;
+
+    }
 
     const next =
       line[
@@ -2906,8 +2853,7 @@ evolutionButton.addEventListener(
       ];
 
     /*
-      減ったHPではなく
-      受けたダメージ量を引き継ぐ
+      受けたダメージ量
     */
 
     const damage =
@@ -2916,6 +2862,28 @@ evolutionButton.addEventListener(
 
     isEvolving =
       true;
+
+    /*
+      他のダイヤル操作を終了
+    */
+
+    isDragging =
+      false;
+
+    pointerMoved =
+      false;
+
+    previousPointerAngle =
+      null;
+
+    accumulatedAngle =
+      0;
+
+    dialContainer
+      .classList
+      .remove(
+        "dragging"
+      );
 
     evolutionButton.disabled =
       true;
@@ -2941,6 +2909,10 @@ evolutionButton.addEventListener(
         "evolving"
       );
 
+    /*
+      演出途中で進化
+    */
+
     window.setTimeout(
       () => {
 
@@ -2949,6 +2921,10 @@ evolutionButton.addEventListener(
 
         maxHp =
           next.maxHp;
+
+        /*
+          ダメージ量を引き継ぐ
+        */
 
         hp =
           Math.max(
@@ -2972,6 +2948,10 @@ evolutionButton.addEventListener(
       },
       650
     );
+
+    /*
+      演出終了
+    */
 
     window.setTimeout(
       () => {
@@ -3002,9 +2982,6 @@ evolutionButton.addEventListener(
 
 /* =========================
    RESET
-
-   選択中ポケモンは維持
-   進化だけ最初に戻す
 ========================= */
 
 resetBtn.addEventListener(
@@ -3047,6 +3024,12 @@ resetBtn.addEventListener(
     hp =
       BASE_MAX_HP;
 
+    isDragging =
+      false;
+
+    pointerMoved =
+      false;
+
     previousPointerAngle =
       null;
 
@@ -3083,7 +3066,7 @@ document.addEventListener(
 );
 
 /* =========================
-   初期化
+   初期表示
 ========================= */
 
 updateAppHeight();
