@@ -1,10 +1,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
->
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>プラコロカウンター</title>
 
 <style>
@@ -25,17 +22,29 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html{
   width:100%;
-  min-height:100%;
+  height:100%;
   margin:0;
+  padding:0;
+  overflow:hidden;
+  overscroll-behavior:none;
 }
 
 body{
-  background:#05070a;
-  color:var(--text);
+  position:fixed;
+  inset:0;
+
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+
+  overflow:hidden;
   overscroll-behavior:none;
+
+  background:var(--page-bg);
+  color:var(--text);
 
   font-family:
     system-ui,
@@ -43,6 +52,8 @@ body{
     "Hiragino Kaku Gothic ProN",
     "Yu Gothic",
     sans-serif;
+
+  touch-action:manipulation;
 }
 
 button,
@@ -58,19 +69,22 @@ select{
   width:100%;
   max-width:600px;
 
-  min-height:100vh;
-  min-height:100dvh;
+  height:100vh;
+  height:100dvh;
 
   margin:0 auto;
 
   padding:
-    max(12px,env(safe-area-inset-top))
-    12px
-    max(12px,env(safe-area-inset-bottom));
+    max(8px,env(safe-area-inset-top))
+    8px
+    max(8px,env(safe-area-inset-bottom));
 
   display:flex;
   flex-direction:column;
-  gap:12px;
+
+  gap:8px;
+
+  overflow:hidden;
 }
 
 /* =========================
@@ -79,18 +93,20 @@ select{
 
 header{
   width:100%;
+  flex:0 0 auto;
 
-  padding:12px 14px;
+  padding:10px 12px;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
 
   background:#090d13;
 
   border:1px solid #263447;
-  border-radius:16px;
+  border-radius:14px;
 }
 
 .title-area{
@@ -107,8 +123,9 @@ header{
     ui-monospace,
     monospace;
 
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
+
   letter-spacing:2px;
 }
 
@@ -117,10 +134,11 @@ h1{
 
   color:#ffffff;
 
-  font-size:clamp(21px,6vw,31px);
+  font-size:clamp(20px,5.8vw,30px);
   font-weight:950;
 
   line-height:1.1;
+
   white-space:nowrap;
 }
 
@@ -131,18 +149,19 @@ h1{
 .reset{
   flex-shrink:0;
 
-  padding:11px 14px;
+  padding:10px 13px;
 
   background:#171f2b;
   color:#ffffff;
 
   border:1px solid #3a4656;
-  border-radius:10px;
+  border-radius:9px;
 
-  font-size:14px;
+  font-size:13px;
   font-weight:900;
 
   cursor:pointer;
+
   touch-action:manipulation;
 }
 
@@ -154,8 +173,8 @@ h1{
 .reset:focus-visible,
 .pokemon-select:focus-visible,
 .dial-container:focus-visible{
-  outline:3px solid #00d47b;
-  outline-offset:3px;
+  outline:3px solid var(--green);
+  outline-offset:2px;
 }
 
 /* =========================
@@ -164,18 +183,23 @@ h1{
 
 .card{
   width:100%;
-  flex:1;
 
-  padding:14px;
+  flex:1 1 auto;
+  min-height:0;
+
+  padding:10px;
 
   background:#0b1017;
 
   border:1px solid #29364a;
-  border-radius:20px;
+  border-radius:18px;
 
   display:flex;
   flex-direction:column;
+
   align-items:center;
+
+  overflow:hidden;
 }
 
 /* =========================
@@ -184,11 +208,14 @@ h1{
 
 .select-frame{
   width:100%;
+
+  flex:0 0 auto;
+
   position:relative;
 }
 
 .select-title{
-  margin-bottom:5px;
+  margin-bottom:4px;
 
   color:#7d8998;
 
@@ -197,8 +224,9 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
+
   letter-spacing:1.5px;
 }
 
@@ -206,9 +234,9 @@ h1{
 
 .pokemon-select{
   width:100%;
-  height:60px;
+  height:54px;
 
-  padding:8px 42px 8px 12px;
+  padding:7px 42px 7px 12px;
 
   appearance:none;
   -webkit-appearance:none;
@@ -219,7 +247,7 @@ h1{
   border:1px solid #354255;
   border-radius:10px;
 
-  font-size:clamp(20px,5vw,27px);
+  font-size:clamp(19px,5vw,26px);
   font-weight:950;
 
   text-align:center;
@@ -234,14 +262,13 @@ h1{
 .pokemon-select option{
   background:#ffffff;
   color:#000000;
+
   font-weight:800;
 }
 
 .pokemon-select:focus{
-  border-color:#00d47b;
+  border-color:var(--green);
 }
-
-/* ▼ */
 
 .select-frame::after{
   content:"▼";
@@ -249,11 +276,11 @@ h1{
   position:absolute;
 
   right:15px;
-  bottom:19px;
+  bottom:17px;
 
   color:#ffffff;
 
-  font-size:13px;
+  font-size:12px;
 
   pointer-events:none;
 }
@@ -264,19 +291,25 @@ h1{
 
 .digital-unit{
   width:100%;
-  flex:1;
 
-  margin-top:14px;
-  padding:10px;
+  flex:1 1 auto;
+  min-height:0;
+
+  margin-top:8px;
+  padding:7px;
 
   background:#070a0f;
 
   border:1px solid #29364a;
-  border-radius:18px;
+  border-radius:16px;
 
   display:flex;
   flex-direction:column;
+
+  align-items:center;
   justify-content:center;
+
+  overflow:hidden;
 }
 
 /* =========================
@@ -284,7 +317,11 @@ h1{
 ========================= */
 
 .digital-header{
-  padding:2px 5px 7px;
+  width:100%;
+
+  flex:0 0 auto;
+
+  padding:1px 5px 3px;
 
   display:flex;
   align-items:center;
@@ -297,40 +334,61 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
-  letter-spacing:1.5px;
+
+  letter-spacing:1.3px;
 }
 
 .status-area{
   display:flex;
   align-items:center;
-  gap:6px;
+
+  gap:5px;
 }
 
 .status-light{
-  width:8px;
-  height:8px;
+  width:7px;
+  height:7px;
 
-  background:#00d47b;
+  background:var(--green);
 
   border-radius:50%;
 }
 
 /* =========================
-   円形ダイヤル
+   ダイヤル
 ========================= */
 
 .dial-container{
-  width:min(88vw,420px);
-  aspect-ratio:1/1;
+  /*
+    横幅だけでなく画面高さにも制限。
+    縦に短いスマホでは自動縮小。
+  */
+
+  width:min(
+    88vw,
+    56dvh,
+    410px
+  );
+
+  max-width:100%;
+
+  aspect-ratio:1 / 1;
+
+  flex:0 1 auto;
 
   margin:0 auto;
 
   position:relative;
 
+  overflow:visible;
+
   user-select:none;
+  -webkit-user-select:none;
+
   touch-action:none;
+  overscroll-behavior:none;
 
   cursor:grab;
 }
@@ -344,11 +402,18 @@ h1{
   height:100%;
 
   display:block;
+
+  overflow:visible;
+
+  user-select:none;
+  -webkit-user-select:none;
+
   touch-action:none;
+  overscroll-behavior:none;
 }
 
 /* =========================
-   円外装
+   円
 ========================= */
 
 .outer-case{
@@ -365,10 +430,6 @@ h1{
   stroke-width:10;
 }
 
-/* =========================
-   ゲージ
-========================= */
-
 .dial-track{
   fill:none;
 
@@ -376,23 +437,20 @@ h1{
   stroke-width:24;
 }
 
-/*
-  ゲージは単色表示。
-  発光やぼかしなし。
-  色はJavaScriptでHPに合わせて変更。
-*/
+/* =========================
+   HPゲージ
+========================= */
 
 .dial-progress{
   fill:none;
 
-  stroke:#00d47b;
+  stroke:var(--green);
   stroke-width:24;
 
   transform:rotate(-90deg);
   transform-origin:180px 180px;
 
-  transition:
-    stroke .15s ease;
+  transition:stroke .12s ease;
 }
 
 /* =========================
@@ -434,7 +492,7 @@ h1{
 }
 
 .dial-hp-value{
-  fill:#00d47b;
+  fill:var(--green);
 
   font-family:
     "Courier New",
@@ -448,8 +506,7 @@ h1{
 
   font-variant-numeric:tabular-nums;
 
-  transition:
-    fill .15s ease;
+  transition:fill .12s ease;
 }
 
 .dial-unit-label{
@@ -491,10 +548,13 @@ h1{
 
   stroke-width:2;
   stroke-linecap:round;
+
+  pointer-events:none;
 }
 
 .scale-line.major{
   stroke:#8d9bad;
+
   stroke-width:4;
 }
 
@@ -510,6 +570,8 @@ h1{
   font-weight:900;
 
   text-anchor:middle;
+
+  pointer-events:none;
 }
 
 /* =========================
@@ -519,20 +581,20 @@ h1{
 .dial-handle{
   fill:#05080c;
 
-  stroke:#00d47b;
+  stroke:var(--green);
   stroke-width:6;
 
-  transition:
-    stroke .15s ease;
+  transition:stroke .12s ease;
+
+  pointer-events:none;
 }
 
 .handle-center{
-  fill:#00d47b;
+  fill:var(--green);
+
+  transition:fill .12s ease;
 
   pointer-events:none;
-
-  transition:
-    fill .15s ease;
 }
 
 .handle-line{
@@ -549,9 +611,11 @@ h1{
 ========================= */
 
 .dial-guide{
+  flex:0 0 auto;
+
   margin-top:-6px;
 
-  padding:7px 10px;
+  padding:4px 8px;
 
   color:#728095;
 
@@ -560,12 +624,14 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:11px;
+  font-size:10px;
   font-weight:900;
 
-  letter-spacing:1px;
+  letter-spacing:.8px;
 
   text-align:center;
+
+  white-space:nowrap;
 }
 
 /* =========================
@@ -575,7 +641,9 @@ h1{
 .limit-indicator{
   width:100%;
 
-  padding:9px 10px 4px;
+  flex:0 0 auto;
+
+  padding:6px 8px 2px;
 
   display:flex;
   align-items:center;
@@ -590,8 +658,9 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
+
   letter-spacing:1px;
 }
 
@@ -600,102 +669,190 @@ h1{
 }
 
 /* =========================
-   スマホ
+   幅が狭いスマホ
 ========================= */
 
 @media(max-width:380px){
 
   .app{
-    padding-left:8px;
-    padding-right:8px;
+    padding-left:6px;
+    padding-right:6px;
   }
 
   header{
-    padding:10px;
+    padding:8px 9px;
   }
 
   h1{
-    font-size:20px;
-  }
-
-  .reset{
-    padding:9px 11px;
-    font-size:13px;
-  }
-
-  .card{
-    padding:10px 8px;
-  }
-
-  .pokemon-select{
-    height:56px;
     font-size:19px;
   }
 
-  .digital-unit{
-    margin-top:8px;
+  .reset{
+    padding:8px 10px;
+    font-size:12px;
+  }
+
+  .card{
     padding:7px;
   }
 
+  .pokemon-select{
+    height:50px;
+
+    font-size:18px;
+  }
+
+  .digital-unit{
+    margin-top:6px;
+
+    padding:5px;
+  }
+
   .dial-container{
-    width:min(92vw,360px);
+    width:min(
+      90vw,
+      55dvh,
+      350px
+    );
   }
 
   .dial-hp-value{
     font-size:74px;
   }
+
+  .dial-guide{
+    font-size:9px;
+  }
+
 }
 
 /* =========================
    高さが低いスマホ
 ========================= */
 
-@media(max-height:700px){
+@media(max-height:750px){
 
   .app{
-    gap:7px;
+    gap:5px;
 
-    padding-top:7px;
-    padding-bottom:7px;
+    padding-top:
+      max(5px,env(safe-area-inset-top));
+
+    padding-bottom:
+      max(5px,env(safe-area-inset-bottom));
+  }
+
+  header{
+    padding:7px 9px;
   }
 
   .system-label{
     display:none;
   }
 
-  header{
-    padding:8px 10px;
+  h1{
+    font-size:19px;
   }
 
-  h1{
-    font-size:20px;
+  .reset{
+    padding:7px 10px;
+    font-size:12px;
   }
 
   .card{
-    padding:7px;
-  }
-
-  .pokemon-select{
-    height:52px;
-  }
-
-  .digital-unit{
-    margin-top:6px;
     padding:6px;
   }
 
+  .select-title{
+    margin-bottom:2px;
+  }
+
+  .pokemon-select{
+    height:46px;
+
+    font-size:18px;
+  }
+
+  .select-frame::after{
+    bottom:14px;
+  }
+
+  .digital-unit{
+    margin-top:5px;
+
+    padding:4px;
+  }
+
+  .digital-header{
+    padding-bottom:0;
+
+    font-size:8px;
+  }
+
   .dial-container{
-    width:min(68vh,350px);
+    width:min(
+      88vw,
+      54dvh,
+      330px
+    );
   }
 
   .dial-guide{
     margin-top:-10px;
-    padding:4px;
 
-    font-size:9px;
+    padding:2px 4px;
+
+    font-size:8px;
   }
+
+  .limit-indicator{
+    padding:3px 7px 1px;
+
+    font-size:8px;
+  }
+
 }
 
+/* =========================
+   かなり高さが低いスマホ
+========================= */
+
+@media(max-height:620px){
+
+  .app{
+    padding-top:4px;
+    padding-bottom:4px;
+  }
+
+  header{
+    padding:5px 8px;
+  }
+
+  h1{
+    font-size:18px;
+  }
+
+  .pokemon-select{
+    height:42px;
+  }
+
+  .digital-unit{
+    margin-top:3px;
+  }
+
+  .dial-container{
+    width:min(
+      86vw,
+      50dvh,
+      285px
+    );
+  }
+
+  .dial-guide{
+    display:none;
+  }
+
+}
 </style>
 </head>
 
@@ -897,7 +1054,7 @@ h1{
       </div>
 
       <div class="dial-guide">
-        RINGをドラッグしてHPを変更
+        タップで移動 ／ RINGをドラッグしてHPを変更
       </div>
 
       <div class="limit-indicator">
@@ -965,15 +1122,24 @@ const HP_STEP = 10;
 let hp = MAX_HP;
 
 let isDragging = false;
+
 let previousPointerAngle = null;
+
 let accumulatedAngle = 0;
 
-/*
-  120HP ÷ 10 = 12段階
-  360度 ÷ 12 = 30度
-*/
+let pointerStartX = 0;
+
+let pointerStartY = 0;
+
+let pointerMoved = false;
+
+/* 10HP = 30度 */
 
 const DEGREES_PER_STEP = 30;
+
+/* タップとドラッグの判定 */
+
+const TAP_MOVE_THRESHOLD = 10;
 
 /* =========================
    円設定
@@ -987,6 +1153,7 @@ const HANDLE_RADIUS = 137;
 
 const SCALE_INNER_RADIUS = 153;
 const SCALE_OUTER_RADIUS = 161;
+
 const LABEL_RADIUS = 169;
 
 const CIRCUMFERENCE =
@@ -997,54 +1164,85 @@ const CIRCUMFERENCE =
 ========================= */
 
 const pokemonSelect =
-  document.getElementById("pokemonSelect");
+  document.getElementById(
+    "pokemonSelect"
+  );
 
 const hpValueEl =
-  document.getElementById("hpValue");
+  document.getElementById(
+    "hpValue"
+  );
 
 const hpPercentEl =
-  document.getElementById("hpPercent");
+  document.getElementById(
+    "hpPercent"
+  );
 
 const dialContainer =
-  document.getElementById("dialContainer");
+  document.getElementById(
+    "dialContainer"
+  );
 
 const hpDial =
-  document.getElementById("hpDial");
+  document.getElementById(
+    "hpDial"
+  );
 
 const dialProgress =
-  document.getElementById("dialProgress");
+  document.getElementById(
+    "dialProgress"
+  );
 
 const dialHandle =
-  document.getElementById("dialHandle");
+  document.getElementById(
+    "dialHandle"
+  );
 
 const handleCenter =
-  document.getElementById("handleCenter");
+  document.getElementById(
+    "handleCenter"
+  );
 
 const handleLine =
-  document.getElementById("handleLine");
+  document.getElementById(
+    "handleLine"
+  );
 
 const scaleLines =
-  document.getElementById("scaleLines");
+  document.getElementById(
+    "scaleLines"
+  );
 
 const scaleLabels =
-  document.getElementById("scaleLabels");
+  document.getElementById(
+    "scaleLabels"
+  );
 
 const resetBtn =
-  document.getElementById("resetBtn");
+  document.getElementById(
+    "resetBtn"
+  );
 
 /* =========================
-   ポケモン一覧作成
+   ポケモン一覧
 ========================= */
 
 pokemonData.forEach(name => {
 
   const option =
-    document.createElement("option");
+    document.createElement(
+      "option"
+    );
 
-  option.value = name;
-  option.textContent = name;
+  option.value =
+    name;
 
-  pokemonSelect.appendChild(option);
+  option.textContent =
+    name;
+
+  pokemonSelect.appendChild(
+    option
+  );
 
 });
 
@@ -1060,17 +1258,21 @@ function polarToCartesian(
 ){
 
   const radians =
-    angle * Math.PI / 180;
+    angle *
+    Math.PI /
+    180;
 
   return {
 
     x:
       centerX +
-      radius * Math.cos(radians),
+      radius *
+      Math.cos(radians),
 
     y:
       centerY +
-      radius * Math.sin(radians)
+      radius *
+      Math.sin(radians)
 
   };
 
@@ -1083,20 +1285,16 @@ function polarToCartesian(
 function hpToAngle(value){
 
   return -90 +
-    (value / MAX_HP) * 360;
+    (value / MAX_HP)
+    * 360;
 
 }
 
 /* =========================
-   HPによる色変更
+   HP色
 ========================= */
 
 function getHpColor(){
-
-  /*
-    0～40
-    赤
-  */
 
   if(hp <= 40){
 
@@ -1104,34 +1302,27 @@ function getHpColor(){
 
   }
 
-  /*
-    50～80
-    黄色
-  */
-
   if(hp <= 80){
 
     return "#ffd400";
 
   }
 
-  /*
-    90～120
-    緑
-  */
-
   return "#00d47b";
 
 }
 
 /* =========================
-   目盛り
+   目盛り作成
 ========================= */
 
 function createDialScale(){
 
-  scaleLines.innerHTML = "";
-  scaleLabels.innerHTML = "";
+  scaleLines.innerHTML =
+    "";
+
+  scaleLabels.innerHTML =
+    "";
 
   for(
     let value = 0;
@@ -1141,7 +1332,8 @@ function createDialScale(){
 
     const angle =
       -90 +
-      (value / MAX_HP) * 360;
+      (value / MAX_HP)
+      * 360;
 
     const isMajor =
       value % 30 === 0;
@@ -1200,7 +1392,9 @@ function createDialScale(){
         : "scale-line"
     );
 
-    scaleLines.appendChild(line);
+    scaleLines.appendChild(
+      line
+    );
 
     if(isMajor){
 
@@ -1238,7 +1432,9 @@ function createDialScale(){
           ? "0/120"
           : value;
 
-      scaleLabels.appendChild(text);
+      scaleLabels.appendChild(
+        text
+      );
 
     }
 
@@ -1259,7 +1455,8 @@ function renderHP(){
     getHpColor();
 
   const progressLength =
-    CIRCUMFERENCE * ratio;
+    CIRCUMFERENCE *
+    ratio;
 
   const dashOffset =
     CIRCUMFERENCE -
@@ -1276,15 +1473,11 @@ function renderHP(){
       handleAngle
     );
 
-  /*
-    デジタル表示
-    0 → 000
-    40 → 040
-    120 → 120
-  */
-
   hpValueEl.textContent =
-    String(hp).padStart(3,"0");
+    String(hp).padStart(
+      3,
+      "0"
+    );
 
   hpPercentEl.textContent =
     Math.round(
@@ -1301,19 +1494,11 @@ function renderHP(){
     "HP " + hp
   );
 
-  /*
-    ゲージ量
-  */
-
   dialProgress.style.strokeDasharray =
     CIRCUMFERENCE;
 
   dialProgress.style.strokeDashoffset =
     dashOffset;
-
-  /*
-    HPによる色
-  */
 
   dialProgress.style.stroke =
     hpColor;
@@ -1327,10 +1512,6 @@ function renderHP(){
   handleCenter.style.fill =
     hpColor;
 
-  /*
-    ノブ位置
-  */
-
   dialHandle.setAttribute(
     "cx",
     handlePos.x
@@ -1350,10 +1531,6 @@ function renderHP(){
     "cy",
     handlePos.y
   );
-
-  /*
-    ノブ内線
-  */
 
   const lineInner =
     polarToCartesian(
@@ -1394,45 +1571,218 @@ function renderHP(){
 }
 
 /* =========================
-   ポインター角度取得
+   ポインター座標
 ========================= */
 
-function getPointerAngle(event){
+function getPointerPosition(
+  event
+){
 
   const rect =
     hpDial.getBoundingClientRect();
 
   const scaleX =
-    360 / rect.width;
+    360 /
+    rect.width;
 
   const scaleY =
-    360 / rect.height;
+    360 /
+    rect.height;
 
-  const x =
-    (event.clientX - rect.left)
-    * scaleX;
+  return {
 
-  const y =
-    (event.clientY - rect.top)
-    * scaleY;
+    x:
+      (
+        event.clientX -
+        rect.left
+      ) * scaleX,
 
-  return Math.atan2(
-    y - CENTER_Y,
-    x - CENTER_X
-  ) * 180 / Math.PI;
+    y:
+      (
+        event.clientY -
+        rect.top
+      ) * scaleY
+
+  };
 
 }
 
 /* =========================
-   ダイヤル操作
+   ポインター角度
 ========================= */
 
-function updateHpFromDrag(event){
+function getPointerAngle(
+  event
+){
+
+  const position =
+    getPointerPosition(
+      event
+    );
+
+  return Math.atan2(
+    position.y -
+      CENTER_Y,
+
+    position.x -
+      CENTER_X
+  ) * 180 /
+    Math.PI;
+
+}
+
+/* =========================
+   タップジャンプ
+========================= */
+
+function jumpToTappedHp(
+  event
+){
+
+  const position =
+    getPointerPosition(
+      event
+    );
+
+  const dx =
+    position.x -
+    CENTER_X;
+
+  const dy =
+    position.y -
+    CENTER_Y;
+
+  const distance =
+    Math.sqrt(
+      dx * dx +
+      dy * dy
+    );
+
+  /*
+    リング付近だけ有効
+  */
+
+  if(
+    distance <
+    DIAL_RADIUS - 45
+  ){
+
+    return;
+
+  }
+
+  if(
+    distance >
+    DIAL_RADIUS + 45
+  ){
+
+    return;
+
+  }
+
+  let angle =
+    Math.atan2(
+      dy,
+      dx
+    ) * 180 /
+    Math.PI;
+
+  /*
+    上を0度として
+    時計回り0～360へ変換
+  */
+
+  let clockwiseAngle =
+    angle + 90;
+
+  if(
+    clockwiseAngle < 0
+  ){
+
+    clockwiseAngle +=
+      360;
+
+  }
+
+  if(
+    clockwiseAngle >= 360
+  ){
+
+    clockwiseAngle -=
+      360;
+
+  }
+
+  let tappedStep =
+    Math.round(
+      clockwiseAngle /
+      DEGREES_PER_STEP
+    );
+
+  if(
+    tappedStep >= 12
+  ){
+
+    tappedStep = 0;
+
+  }
+
+  let tappedHp =
+    tappedStep *
+    HP_STEP;
+
+  /*
+    0と120の重なる上端だけ
+    現在値に近い方を選択
+  */
+
+  if(
+    tappedStep === 0
+  ){
+
+    tappedHp =
+      hp >= 60
+        ? 120
+        : 0;
+
+  }
+
+  hp =
+    Math.max(
+      MIN_HP,
+      Math.min(
+        MAX_HP,
+        tappedHp
+      )
+    );
+
+  previousPointerAngle =
+    null;
+
+  accumulatedAngle =
+    0;
+
+  renderHP();
+
+}
+
+/* =========================
+   ドラッグ
+========================= */
+
+function updateHpFromDrag(
+  event
+){
 
   const currentAngle =
-    getPointerAngle(event);
+    getPointerAngle(
+      event
+    );
 
-  if(previousPointerAngle === null){
+  if(
+    previousPointerAngle ===
+    null
+  ){
 
     previousPointerAngle =
       currentAngle;
@@ -1446,19 +1796,25 @@ function updateHpFromDrag(event){
     previousPointerAngle;
 
   /*
-    円の0度境界をまたいだ際に
-    360度飛ばないよう補正
+    円の境界をまたいでも
+    360度ジャンプさせない
   */
 
-  if(difference > 180){
+  if(
+    difference > 180
+  ){
 
-    difference -= 360;
+    difference -=
+      360;
 
   }
 
-  if(difference < -180){
+  if(
+    difference < -180
+  ){
 
-    difference += 360;
+    difference +=
+      360;
 
   }
 
@@ -1466,8 +1822,7 @@ function updateHpFromDrag(event){
     difference;
 
   /*
-    時計回り
-    HP +10
+    時計回り +10
   */
 
   while(
@@ -1475,12 +1830,15 @@ function updateHpFromDrag(event){
     DEGREES_PER_STEP
   ){
 
-    if(hp < MAX_HP){
+    if(
+      hp < MAX_HP
+    ){
 
-      hp = Math.min(
-        MAX_HP,
-        hp + HP_STEP
-      );
+      hp =
+        Math.min(
+          MAX_HP,
+          hp + HP_STEP
+        );
 
       renderHP();
 
@@ -1492,8 +1850,7 @@ function updateHpFromDrag(event){
   }
 
   /*
-    反時計回り
-    HP -10
+    反時計回り -10
   */
 
   while(
@@ -1501,12 +1858,15 @@ function updateHpFromDrag(event){
     -DEGREES_PER_STEP
   ){
 
-    if(hp > MIN_HP){
+    if(
+      hp > MIN_HP
+    ){
 
-      hp = Math.max(
-        MIN_HP,
-        hp - HP_STEP
-      );
+      hp =
+        Math.max(
+          MIN_HP,
+          hp - HP_STEP
+        );
 
       renderHP();
 
@@ -1518,7 +1878,7 @@ function updateHpFromDrag(event){
   }
 
   /*
-    120 → 0へ飛ばない
+    120→0へ飛ばない
   */
 
   if(
@@ -1526,12 +1886,13 @@ function updateHpFromDrag(event){
     accumulatedAngle > 0
   ){
 
-    accumulatedAngle = 0;
+    accumulatedAngle =
+      0;
 
   }
 
   /*
-    0 → 120へ飛ばない
+    0→120へ飛ばない
   */
 
   if(
@@ -1539,7 +1900,8 @@ function updateHpFromDrag(event){
     accumulatedAngle < 0
   ){
 
-    accumulatedAngle = 0;
+    accumulatedAngle =
+      0;
 
   }
 
@@ -1558,20 +1920,43 @@ dialContainer.addEventListener(
 
     event.preventDefault();
 
-    isDragging = true;
+    isDragging =
+      true;
+
+    pointerMoved =
+      false;
+
+    pointerStartX =
+      event.clientX;
+
+    pointerStartY =
+      event.clientY;
 
     previousPointerAngle =
-      getPointerAngle(event);
+      getPointerAngle(
+        event
+      );
 
-    accumulatedAngle = 0;
+    accumulatedAngle =
+      0;
 
     dialContainer.classList.add(
       "dragging"
     );
 
-    dialContainer.setPointerCapture(
-      event.pointerId
-    );
+    try{
+
+      dialContainer.setPointerCapture(
+        event.pointerId
+      );
+
+    }catch(error){
+
+      /*
+        一部ブラウザ用
+      */
+
+    }
 
   }
 );
@@ -1584,14 +1969,53 @@ dialContainer.addEventListener(
   "pointermove",
   event => {
 
-    if(!isDragging){
+    if(
+      !isDragging
+    ){
+
       return;
+
     }
 
     event.preventDefault();
 
-    updateHpFromDrag(event);
+    const moveX =
+      event.clientX -
+      pointerStartX;
 
+    const moveY =
+      event.clientY -
+      pointerStartY;
+
+    const moveDistance =
+      Math.sqrt(
+        moveX * moveX +
+        moveY * moveY
+      );
+
+    if(
+      moveDistance >
+      TAP_MOVE_THRESHOLD
+    ){
+
+      pointerMoved =
+        true;
+
+    }
+
+    if(
+      pointerMoved
+    ){
+
+      updateHpFromDrag(
+        event
+      );
+
+    }
+
+  },
+  {
+    passive:false
   }
 );
 
@@ -1599,27 +2023,58 @@ dialContainer.addEventListener(
    操作終了
 ========================= */
 
-function stopDragging(event){
+function finishPointer(
+  event,
+  allowTap
+){
 
-  isDragging = false;
+  if(
+    isDragging &&
+    allowTap &&
+    !pointerMoved
+  ){
 
-  previousPointerAngle = null;
-  accumulatedAngle = 0;
+    jumpToTappedHp(
+      event
+    );
+
+  }
+
+  isDragging =
+    false;
+
+  pointerMoved =
+    false;
+
+  previousPointerAngle =
+    null;
+
+  accumulatedAngle =
+    0;
 
   dialContainer.classList.remove(
     "dragging"
   );
 
-  if(
-    event &&
-    dialContainer.hasPointerCapture(
-      event.pointerId
-    )
-  ){
+  try{
 
-    dialContainer.releasePointerCapture(
-      event.pointerId
-    );
+    if(
+      dialContainer.hasPointerCapture(
+        event.pointerId
+      )
+    ){
+
+      dialContainer.releasePointerCapture(
+        event.pointerId
+      );
+
+    }
+
+  }catch(error){
+
+    /*
+      一部ブラウザ用
+    */
 
   }
 
@@ -1627,16 +2082,30 @@ function stopDragging(event){
 
 dialContainer.addEventListener(
   "pointerup",
-  stopDragging
+  event => {
+
+    finishPointer(
+      event,
+      true
+    );
+
+  }
 );
 
 dialContainer.addEventListener(
   "pointercancel",
-  stopDragging
+  event => {
+
+    finishPointer(
+      event,
+      false
+    );
+
+  }
 );
 
 /* =========================
-   キーボード操作
+   キーボード
 ========================= */
 
 dialContainer.addEventListener(
@@ -1644,32 +2113,38 @@ dialContainer.addEventListener(
   event => {
 
     if(
-      event.key === "ArrowLeft" ||
-      event.key === "ArrowDown"
+      event.key ===
+        "ArrowLeft" ||
+      event.key ===
+        "ArrowDown"
     ){
 
       event.preventDefault();
 
-      hp = Math.max(
-        MIN_HP,
-        hp - HP_STEP
-      );
+      hp =
+        Math.max(
+          MIN_HP,
+          hp - HP_STEP
+        );
 
       renderHP();
 
     }
 
     if(
-      event.key === "ArrowRight" ||
-      event.key === "ArrowUp"
+      event.key ===
+        "ArrowRight" ||
+      event.key ===
+        "ArrowUp"
     ){
 
       event.preventDefault();
 
-      hp = Math.min(
-        MAX_HP,
-        hp + HP_STEP
-      );
+      hp =
+        Math.min(
+          MAX_HP,
+          hp + HP_STEP
+        );
 
       renderHP();
 
@@ -1680,18 +2155,20 @@ dialContainer.addEventListener(
 
 /* =========================
    ポケモン変更
-
-   HPは120に戻す
 ========================= */
 
 pokemonSelect.addEventListener(
   "change",
   () => {
 
-    hp = MAX_HP;
+    hp =
+      MAX_HP;
 
-    previousPointerAngle = null;
-    accumulatedAngle = 0;
+    previousPointerAngle =
+      null;
+
+    accumulatedAngle =
+      0;
 
     renderHP();
 
@@ -1700,22 +2177,43 @@ pokemonSelect.addEventListener(
 
 /* =========================
    RESET
-
-   ポケモンは維持
-   HPだけ120
 ========================= */
 
 resetBtn.addEventListener(
   "click",
   () => {
 
-    hp = MAX_HP;
+    hp =
+      MAX_HP;
 
-    previousPointerAngle = null;
-    accumulatedAngle = 0;
+    previousPointerAngle =
+      null;
+
+    accumulatedAngle =
+      0;
 
     renderHP();
 
+  }
+);
+
+/* =========================
+   スクロール抑止
+
+   ダイヤル操作中の
+   touchmoveをブラウザ側へ
+   渡さない
+========================= */
+
+dialContainer.addEventListener(
+  "touchmove",
+  event => {
+
+    event.preventDefault();
+
+  },
+  {
+    passive:false
   }
 );
 
@@ -1724,6 +2222,7 @@ resetBtn.addEventListener(
 ========================= */
 
 createDialScale();
+
 renderHP();
 
 </script>
