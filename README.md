@@ -18,6 +18,12 @@
   --yellow:#ffd400;
   --red:#ff334f;
   --evolution:#22c55e;
+
+  /*
+    JSで実際のブラウザ表示高さを設定。
+    JSが動く前は100dvhを使用。
+  */
+  --app-height:100dvh;
 }
 
 *{
@@ -29,6 +35,7 @@ html,
 body{
   width:100%;
   height:100%;
+
   margin:0;
   padding:0;
 
@@ -40,8 +47,15 @@ body{
   position:fixed;
   inset:0;
 
+  width:100%;
+
+  height:var(--app-height);
+
   background:var(--page-bg);
   color:var(--text);
+
+  overflow:hidden;
+  overscroll-behavior:none;
 
   font-family:
     system-ui,
@@ -58,28 +72,35 @@ select{
   font-family:inherit;
 }
 
+button{
+  user-select:none;
+  -webkit-user-select:none;
+}
+
 /* =========================
    全体
+
+   100vh固定ではなく
+   実表示高さに合わせる
 ========================= */
 
 .app{
   width:100%;
   max-width:600px;
 
-  height:100vh;
-  height:100dvh;
+  height:var(--app-height);
 
   margin:0 auto;
 
   padding:
-    max(8px,env(safe-area-inset-top))
-    8px
-    max(8px,env(safe-area-inset-bottom));
+    max(5px,env(safe-area-inset-top))
+    6px
+    max(5px,env(safe-area-inset-bottom));
 
   display:flex;
   flex-direction:column;
 
-  gap:8px;
+  gap:5px;
 
   overflow:hidden;
 }
@@ -92,18 +113,18 @@ header{
   width:100%;
   flex:0 0 auto;
 
-  padding:10px 12px;
+  padding:8px 10px;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
 
-  gap:10px;
+  gap:8px;
 
   background:#090d13;
 
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:12px;
 }
 
 .title-area{
@@ -111,7 +132,7 @@ header{
 }
 
 .system-label{
-  margin-bottom:3px;
+  margin-bottom:2px;
 
   color:#64748b;
 
@@ -120,10 +141,10 @@ header{
     ui-monospace,
     monospace;
 
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
 
-  letter-spacing:2px;
+  letter-spacing:1.7px;
 }
 
 h1{
@@ -131,10 +152,10 @@ h1{
 
   color:#ffffff;
 
-  font-size:clamp(20px,5.8vw,30px);
+  font-size:clamp(19px,5.5vw,29px);
   font-weight:950;
 
-  line-height:1.1;
+  line-height:1.05;
 
   white-space:nowrap;
 }
@@ -146,18 +167,19 @@ h1{
 .reset{
   flex-shrink:0;
 
-  padding:10px 13px;
+  padding:8px 11px;
 
   background:#171f2b;
   color:#ffffff;
 
   border:1px solid #3a4656;
-  border-radius:9px;
+  border-radius:8px;
 
-  font-size:13px;
+  font-size:12px;
   font-weight:900;
 
   cursor:pointer;
+
   touch-action:manipulation;
 }
 
@@ -165,6 +187,14 @@ h1{
   transform:scale(.96);
 
   background:#212c3a;
+}
+
+.reset:focus-visible,
+.pokemon-select:focus-visible,
+.dial-container:focus-visible,
+.evolution-button:focus-visible{
+  outline:3px solid var(--green);
+  outline-offset:2px;
 }
 
 /* =========================
@@ -177,12 +207,12 @@ h1{
   flex:1 1 auto;
   min-height:0;
 
-  padding:10px;
+  padding:7px;
 
   background:var(--panel);
 
   border:1px solid #29364a;
-  border-radius:18px;
+  border-radius:16px;
 
   display:flex;
   flex-direction:column;
@@ -199,13 +229,14 @@ h1{
 
 .select-frame{
   width:100%;
+
   flex:0 0 auto;
 
   position:relative;
 }
 
 .select-title{
-  margin-bottom:4px;
+  margin-bottom:2px;
 
   color:#7d8998;
 
@@ -214,17 +245,17 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
 
-  letter-spacing:1.5px;
+  letter-spacing:1.3px;
 }
 
 .pokemon-select{
   width:100%;
-  height:54px;
+  height:48px;
 
-  padding:7px 42px 7px 12px;
+  padding:6px 40px 6px 10px;
 
   appearance:none;
   -webkit-appearance:none;
@@ -233,9 +264,9 @@ h1{
   color:#ffffff;
 
   border:1px solid #354255;
-  border-radius:10px;
+  border-radius:9px;
 
-  font-size:clamp(19px,5vw,26px);
+  font-size:clamp(18px,5vw,25px);
   font-weight:950;
 
   text-align:center;
@@ -244,7 +275,11 @@ h1{
   outline:none;
 
   cursor:pointer;
+
+  touch-action:manipulation;
 }
+
+/* 開いた一覧 */
 
 .pokemon-select option{
   background:#ffffff;
@@ -262,12 +297,12 @@ h1{
 
   position:absolute;
 
-  right:15px;
-  bottom:17px;
+  right:14px;
+  bottom:15px;
 
   color:#ffffff;
 
-  font-size:12px;
+  font-size:11px;
 
   pointer-events:none;
 }
@@ -282,13 +317,13 @@ h1{
   flex:1 1 auto;
   min-height:0;
 
-  margin-top:8px;
-  padding:7px;
+  margin-top:5px;
+  padding:4px;
 
   background:#070a0f;
 
   border:1px solid #29364a;
-  border-radius:16px;
+  border-radius:14px;
 
   display:flex;
   flex-direction:column;
@@ -300,10 +335,15 @@ h1{
   position:relative;
 }
 
+/* =========================
+   モニターヘッダー
+========================= */
+
 .digital-header{
   width:100%;
+  flex:0 0 auto;
 
-  padding:1px 5px 3px;
+  padding:0 5px 1px;
 
   display:flex;
   align-items:center;
@@ -316,23 +356,22 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
 
-  letter-spacing:1.3px;
+  letter-spacing:1.1px;
 }
 
 .status-area{
   display:flex;
-
   align-items:center;
 
-  gap:5px;
+  gap:4px;
 }
 
 .status-light{
-  width:7px;
-  height:7px;
+  width:6px;
+  height:6px;
 
   background:var(--green);
 
@@ -340,15 +379,23 @@ h1{
 }
 
 /* =========================
-   ダイヤル
+   HPダイヤル
+
+   実表示高さの約53%以内に
+   自動的に収める
 ========================= */
 
 .dial-container{
-  width:min(88vw,56dvh,410px);
+  width:min(
+    88vw,
+    calc(var(--app-height) * .53),
+    400px
+  );
 
   max-width:100%;
+  max-height:100%;
 
-  aspect-ratio:1/1;
+  aspect-ratio:1 / 1;
 
   flex:0 1 auto;
 
@@ -360,7 +407,6 @@ h1{
   -webkit-user-select:none;
 
   touch-action:none;
-
   overscroll-behavior:none;
 
   cursor:grab;
@@ -382,6 +428,7 @@ h1{
   -webkit-user-select:none;
 
   touch-action:none;
+  overscroll-behavior:none;
 }
 
 /* =========================
@@ -392,7 +439,6 @@ h1{
   fill:#05080c;
 
   stroke:#263447;
-
   stroke-width:5;
 }
 
@@ -400,37 +446,27 @@ h1{
   fill:none;
 
   stroke:#111924;
-
   stroke-width:10;
 }
 
 /* =========================
-   ゲージ
+   HPゲージ
 ========================= */
 
 .dial-track{
   fill:none;
 
   stroke:#1d2734;
-
   stroke-width:24;
 }
-
-/*
-  ラグ対策：
-  stroke-dashoffsetのtransitionを削除。
-  JSのHP変更と同時に即座に更新。
-*/
 
 .dial-progress{
   fill:none;
 
   stroke:var(--green);
-
   stroke-width:24;
 
   transform:rotate(-90deg);
-
   transform-origin:180px 180px;
 }
 
@@ -442,7 +478,6 @@ h1{
   fill:#05080c;
 
   stroke:#28374a;
-
   stroke-width:4;
 }
 
@@ -450,7 +485,6 @@ h1{
   fill:#090e14;
 
   stroke:#162333;
-
   stroke-width:2;
 }
 
@@ -528,7 +562,6 @@ h1{
   stroke:#46566a;
 
   stroke-width:2;
-
   stroke-linecap:round;
 
   pointer-events:none;
@@ -564,7 +597,6 @@ h1{
   fill:#05080c;
 
   stroke:var(--green);
-
   stroke-width:6;
 
   pointer-events:none;
@@ -580,7 +612,6 @@ h1{
   stroke:#05080c;
 
   stroke-width:2;
-
   stroke-linecap:round;
 
   pointer-events:none;
@@ -593,13 +624,13 @@ h1{
 .evolution-button{
   position:absolute;
 
-  right:14px;
-  bottom:42px;
+  right:9px;
+  bottom:29px;
 
   z-index:10;
 
-  width:74px;
-  height:74px;
+  width:60px;
+  height:60px;
 
   padding:0;
 
@@ -610,15 +641,14 @@ h1{
   background:#16a34a;
   color:#ffffff;
 
-  border:4px solid #86efac;
-
+  border:3px solid #86efac;
   border-radius:50%;
 
   box-shadow:
-    0 5px 0 #075d2b,
-    0 8px 14px rgba(0,0,0,.4);
+    0 4px 0 #075d2b,
+    0 6px 10px rgba(0,0,0,.4);
 
-  font-size:18px;
+  font-size:15px;
   font-weight:950;
 
   cursor:pointer;
@@ -632,8 +662,11 @@ h1{
 
 .evolution-button:active{
   transform:
-    translateY(4px)
+    translateY(3px)
     scale(.96);
+
+  box-shadow:
+    0 1px 0 #075d2b;
 }
 
 .evolution-button:disabled{
@@ -666,7 +699,9 @@ h1{
 
   animation:
     evolutionBackground
-    1.5s ease both;
+    1.5s
+    ease
+    both;
 }
 
 .evolution-flash{
@@ -676,7 +711,6 @@ h1{
   height:40px;
 
   border:6px solid #ffffff;
-
   border-radius:50%;
 
   opacity:0;
@@ -686,7 +720,9 @@ h1{
 .evolution-flash{
   animation:
     evolutionRing
-    1.35s ease-out both;
+    1.35s
+    ease-out
+    both;
 }
 
 .evolution-flash.second{
@@ -699,8 +735,9 @@ h1{
 
 .evolution-text{
   position:relative;
-
   z-index:4;
+
+  padding:12px 22px;
 
   color:#ffffff;
 
@@ -714,9 +751,9 @@ h1{
 
   letter-spacing:3px;
 
-  opacity:0;
-
   text-align:center;
+
+  opacity:0;
 
   text-shadow:
     0 2px 0 #087a39,
@@ -727,27 +764,32 @@ h1{
 .evolution-text{
   animation:
     evolutionText
-    1.5s ease both;
+    1.5s
+    ease
+    both;
 }
 
 .digital-unit.evolving{
   animation:
     monitorEvolution
-    1.5s ease;
+    1.5s
+    ease;
 }
 
 .digital-unit.evolving
 .dial-progress{
   animation:
     gaugeEvolution
-    1.5s ease;
+    1.5s
+    ease;
 }
 
 .digital-unit.evolving
 .dial-hp-value{
   animation:
     numberEvolution
-    1.5s ease;
+    1.5s
+    ease;
 }
 
 @keyframes evolutionBackground{
@@ -915,13 +957,15 @@ h1{
 }
 
 /* =========================
-   下部
+   操作説明
 ========================= */
 
 .dial-guide{
-  margin-top:-6px;
+  flex:0 0 auto;
 
-  padding:4px 8px;
+  margin-top:-7px;
+
+  padding:2px 6px;
 
   color:#728095;
 
@@ -930,16 +974,23 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
 
   text-align:center;
+
+  white-space:nowrap;
 }
+
+/* =========================
+   下部
+========================= */
 
 .limit-indicator{
   width:100%;
+  flex:0 0 auto;
 
-  padding:6px 8px 2px;
+  padding:4px 7px 1px;
 
   display:flex;
   align-items:center;
@@ -954,7 +1005,7 @@ h1{
     ui-monospace,
     monospace;
 
-  font-size:9px;
+  font-size:8px;
   font-weight:900;
 }
 
@@ -963,118 +1014,161 @@ h1{
 }
 
 /* =========================
-   スマホ調整
+   高さが小さいスマホ
+
+   ブラウザ上部UI表示時にも
+   収まりやすくする
 ========================= */
 
-@media(max-width:380px){
+@media(max-height:700px){
 
   .app{
-    padding-left:6px;
-    padding-right:6px;
+    padding-top:
+      max(3px,env(safe-area-inset-top));
+
+    padding-bottom:
+      max(3px,env(safe-area-inset-bottom));
+
+    gap:3px;
   }
 
   header{
-    padding:8px 9px;
-  }
-
-  h1{
-    font-size:19px;
-  }
-
-  .reset{
-    padding:8px 10px;
-
-    font-size:12px;
-  }
-
-  .card{
-    padding:7px;
-  }
-
-  .pokemon-select{
-    height:50px;
-
-    font-size:18px;
-  }
-
-  .digital-unit{
-    margin-top:6px;
-
-    padding:5px;
-  }
-
-  .dial-container{
-    width:min(
-      90vw,
-      55dvh,
-      350px
-    );
-  }
-
-  .evolution-button{
-    right:8px;
-    bottom:34px;
-
-    width:64px;
-    height:64px;
-
-    font-size:16px;
-  }
-
-}
-
-@media(max-height:750px){
-
-  .app{
-    gap:5px;
+    padding:5px 8px;
   }
 
   .system-label{
     display:none;
   }
 
-  header{
-    padding:7px 9px;
+  h1{
+    font-size:18px;
   }
 
-  h1{
-    font-size:19px;
+  .reset{
+    padding:6px 9px;
+
+    font-size:11px;
   }
 
   .card{
-    padding:6px;
+    padding:5px;
+  }
+
+  .select-title{
+    display:none;
   }
 
   .pokemon-select{
-    height:46px;
+    height:42px;
+
+    font-size:17px;
+  }
+
+  .select-frame::after{
+    bottom:13px;
   }
 
   .digital-unit{
-    margin-top:5px;
+    margin-top:3px;
 
-    padding:4px;
+    padding:3px;
+  }
+
+  .digital-header{
+    font-size:7px;
   }
 
   .dial-container{
     width:min(
-      88vw,
-      54dvh,
-      330px
+      87vw,
+      calc(var(--app-height) * .51),
+      325px
     );
   }
 
+  .dial-guide{
+    margin-top:-9px;
+
+    padding:1px 4px;
+
+    font-size:8px;
+  }
+
+  .limit-indicator{
+    padding:2px 6px 1px;
+
+    font-size:7px;
+  }
+
   .evolution-button{
-    right:8px;
-    bottom:28px;
+    right:7px;
+    bottom:20px;
 
-    width:60px;
-    height:60px;
+    width:54px;
+    height:54px;
 
-    font-size:15px;
+    font-size:13px;
   }
 
 }
 
+@media(max-height:600px){
+
+  header{
+    padding:4px 7px;
+  }
+
+  h1{
+    font-size:17px;
+  }
+
+  .pokemon-select{
+    height:38px;
+
+    font-size:16px;
+  }
+
+  .select-frame::after{
+    bottom:12px;
+  }
+
+  .dial-container{
+    width:min(
+      85vw,
+      calc(var(--app-height) * .48),
+      280px
+    );
+  }
+
+  .dial-guide{
+    display:none;
+  }
+
+  .limit-indicator{
+    padding-top:1px;
+  }
+
+  .evolution-button{
+    bottom:15px;
+
+    width:48px;
+    height:48px;
+
+    font-size:12px;
+  }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+  }
+
+}
 </style>
 </head>
 
@@ -1117,6 +1211,7 @@ h1{
     <select
       id="pokemonSelect"
       class="pokemon-select"
+      aria-label="ポケモンを選択"
     >
 
       <option value="">
@@ -1151,12 +1246,20 @@ h1{
     <div
       id="dialContainer"
       class="dial-container"
+      role="slider"
+      aria-label="HP"
+      aria-valuemin="0"
+      aria-valuemax="120"
+      aria-valuenow="120"
+      aria-valuetext="HP 120"
+      tabindex="0"
     >
 
       <svg
         id="hpDial"
         class="hp-dial"
         viewBox="0 0 360 360"
+        aria-hidden="true"
       >
 
         <circle
@@ -1224,1795 +1327,4 @@ h1{
         </text>
 
         <text
-          class="dial-unit-label"
-          x="180"
-          y="243"
-        >
-          LIFE POINT
-        </text>
-
-        <text
-          id="hpPercent"
-          class="dial-percent"
-          x="180"
-          y="268"
-        >
-          100%
-        </text>
-
-        <circle
-          id="dialHandle"
-          class="dial-handle"
-          cx="180"
-          cy="43"
-          r="16"
-        ></circle>
-
-        <circle
-          id="handleCenter"
-          class="handle-center"
-          cx="180"
-          cy="43"
-          r="6"
-        ></circle>
-
-        <line
-          id="handleLine"
-          class="handle-line"
-          x1="180"
-          y1="39"
-          x2="180"
-          y2="47"
-        ></line>
-
-      </svg>
-
-    </div>
-
-    <button
-      id="evolutionButton"
-      class="evolution-button"
-      type="button"
-    >
-      進化
-    </button>
-
-    <div class="dial-guide">
-      タップで移動 ／ RINGをドラッグ
-    </div>
-
-    <div class="limit-indicator">
-
-      <span>
-        MIN <strong>000</strong>
-      </span>
-
-      <span>
-        STEP <strong>010</strong>
-      </span>
-
-      <span>
-        MAX <strong id="maxHpLabel">120</strong>
-      </span>
-
-    </div>
-
-    <div
-      id="evolutionOverlay"
-      class="evolution-overlay"
-    >
-
-      <div class="evolution-flash"></div>
-
-      <div class="evolution-flash second"></div>
-
-      <div class="evolution-flash third"></div>
-
-      <div
-        id="evolutionText"
-        class="evolution-text"
-      >
-        EVOLUTION
-      </div>
-
-    </div>
-
-  </section>
-
-</main>
-
-</div>
-
-<script>
-
-/* =========================
-   進化データ
-========================= */
-
-const evolutionData = {
-
-  "ヒトカゲ":[
-    {name:"ヒトカゲ",maxHp:120},
-    {name:"リザード",maxHp:150},
-    {name:"リザードン",maxHp:180}
-  ],
-
-  "フシギダネ":[
-    {name:"フシギダネ",maxHp:120},
-    {name:"フシギソウ",maxHp:150},
-    {name:"フシギバナ",maxHp:180}
-  ],
-
-  "ゼニガメ":[
-    {name:"ゼニガメ",maxHp:120},
-    {name:"カメール",maxHp:150},
-    {name:"カメックス",maxHp:180}
-  ]
-
-};
-
-
-/* =========================
-   ポケモン一覧
-========================= */
-
-const pokemonData = [
-
-  "ピカチュウ",
-  "ヒトカゲ",
-  "フシギダネ",
-  "ゼニガメ",
-  "ミュウ",
-  "イーブイ",
-  "ルカリオ",
-  "メタグロス",
-  "ゲンガー",
-  "イワーク",
-  "ベトベター",
-  "カイロス",
-  "ファイヤー",
-  "サンダー",
-  "フリーザー",
-  "ヤミラミ",
-  "ゲッコウガ",
-  "ボスゴドラ",
-  "レックウザ",
-  "カヌチャン",
-  "ラッキー"
-
-];
-
-
-/* =========================
-   基本状態
-========================= */
-
-const MIN_HP = 0;
-const HP_STEP = 10;
-const BASE_MAX_HP = 120;
-
-let hp =
-  BASE_MAX_HP;
-
-let maxHp =
-  BASE_MAX_HP;
-
-let selectedBasePokemon =
-  "";
-
-let evolutionStage =
-  0;
-
-let isEvolving =
-  false;
-
-
-/* =========================
-   操作状態
-========================= */
-
-let isDragging =
-  false;
-
-let previousPointerAngle =
-  null;
-
-let accumulatedAngle =
-  0;
-
-let pointerStartX =
-  0;
-
-let pointerStartY =
-  0;
-
-let pointerMoved =
-  false;
-
-
-/*
-  これより動いたら
-  タップではなくドラッグ
-*/
-
-const TAP_MOVE_THRESHOLD =
-  8;
-
-
-/* =========================
-   円
-========================= */
-
-const CENTER_X = 180;
-const CENTER_Y = 180;
-
-const DIAL_RADIUS =
-  137;
-
-const HANDLE_RADIUS =
-  DIAL_RADIUS;
-
-const SCALE_INNER_RADIUS =
-  153;
-
-const SCALE_OUTER_RADIUS =
-  161;
-
-const LABEL_RADIUS =
-  169;
-
-const CIRCUMFERENCE =
-  2 *
-  Math.PI *
-  DIAL_RADIUS;
-
-
-/* =========================
-   DOM
-========================= */
-
-const pokemonSelect =
-  document.getElementById(
-    "pokemonSelect"
-  );
-
-const hpValueEl =
-  document.getElementById(
-    "hpValue"
-  );
-
-const hpPercentEl =
-  document.getElementById(
-    "hpPercent"
-  );
-
-const dialContainer =
-  document.getElementById(
-    "dialContainer"
-  );
-
-const hpDial =
-  document.getElementById(
-    "hpDial"
-  );
-
-const dialProgress =
-  document.getElementById(
-    "dialProgress"
-  );
-
-const dialHandle =
-  document.getElementById(
-    "dialHandle"
-  );
-
-const handleCenter =
-  document.getElementById(
-    "handleCenter"
-  );
-
-const handleLine =
-  document.getElementById(
-    "handleLine"
-  );
-
-const scaleLines =
-  document.getElementById(
-    "scaleLines"
-  );
-
-const scaleLabels =
-  document.getElementById(
-    "scaleLabels"
-  );
-
-const resetBtn =
-  document.getElementById(
-    "resetBtn"
-  );
-
-const maxHpLabel =
-  document.getElementById(
-    "maxHpLabel"
-  );
-
-const evolutionButton =
-  document.getElementById(
-    "evolutionButton"
-  );
-
-const evolutionOverlay =
-  document.getElementById(
-    "evolutionOverlay"
-  );
-
-const evolutionText =
-  document.getElementById(
-    "evolutionText"
-  );
-
-const digitalUnit =
-  document.getElementById(
-    "digitalUnit"
-  );
-
-const monitorName =
-  document.getElementById(
-    "monitorName"
-  );
-
-
-/* =========================
-   ポケモン一覧生成
-========================= */
-
-pokemonData.forEach(
-  name => {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      name;
-
-    option.textContent =
-      name;
-
-    pokemonSelect.appendChild(
-      option
-    );
-
-  }
-);
-
-
-/* =========================
-   進化情報
-========================= */
-
-function getEvolutionLine(){
-
-  return evolutionData[
-    selectedBasePokemon
-  ] || null;
-
-}
-
-
-function getCurrentPokemonName(){
-
-  const line =
-    getEvolutionLine();
-
-  if(!line){
-
-    return selectedBasePokemon;
-
-  }
-
-  return line[
-    evolutionStage
-  ].name;
-
-}
-
-
-function hasNextEvolution(){
-
-  const line =
-    getEvolutionLine();
-
-  return Boolean(
-    line &&
-    evolutionStage <
-      line.length - 1
-  );
-
-}
-
-
-/* =========================
-   選択欄表示
-========================= */
-
-function restoreEvolutionOptionNames(){
-
-  Array.from(
-    pokemonSelect.options
-  ).forEach(
-    option => {
-
-      if(
-        evolutionData[
-          option.value
-        ]
-      ){
-
-        option.textContent =
-          option.value;
-
-      }
-
-    }
-  );
-
-}
-
-
-function updateSelectedOptionText(){
-
-  const option =
-    pokemonSelect.options[
-      pokemonSelect.selectedIndex
-    ];
-
-  if(
-    option &&
-    pokemonSelect.value
-  ){
-
-    option.textContent =
-      getCurrentPokemonName();
-
-  }
-
-}
-
-
-/* =========================
-   進化ボタン
-========================= */
-
-function renderEvolutionButton(){
-
-  const show =
-    hasNextEvolution() &&
-    !isEvolving;
-
-  evolutionButton.classList.toggle(
-    "show",
-    show
-  );
-
-  evolutionButton.disabled =
-    !show;
-
-}
-
-
-/* =========================
-   座標
-========================= */
-
-function polarToCartesian(
-  centerX,
-  centerY,
-  radius,
-  angle
-){
-
-  const radians =
-    angle *
-    Math.PI /
-    180;
-
-  return {
-
-    x:
-      centerX +
-      radius *
-      Math.cos(
-        radians
-      ),
-
-    y:
-      centerY +
-      radius *
-      Math.sin(
-        radians
-      )
-
-  };
-
-}
-
-
-/* =========================
-   10HPあたり角度
-========================= */
-
-function getDegreesPerStep(){
-
-  return 360 /
-    (
-      maxHp /
-      HP_STEP
-    );
-
-}
-
-
-/* =========================
-   HP → 角度
-========================= */
-
-function hpToAngle(
-  value
-){
-
-  return -90 +
-    (
-      value /
-      maxHp
-    ) *
-    360;
-
-}
-
-
-/* =========================
-   HP色
-========================= */
-
-function getHpColor(){
-
-  if(hp <= 40){
-
-    return "#ff334f";
-
-  }
-
-  if(hp <= 80){
-
-    return "#ffd400";
-
-  }
-
-  return "#00d47b";
-
-}
-
-
-/* =========================
-   目盛り
-========================= */
-
-function createDialScale(){
-
-  scaleLines.innerHTML =
-    "";
-
-  scaleLabels.innerHTML =
-    "";
-
-  for(
-    let value = 0;
-    value < maxHp;
-    value += HP_STEP
-  ){
-
-    const angle =
-      -90 +
-      (
-        value /
-        maxHp
-      ) *
-      360;
-
-    const isMajor =
-      value % 30 === 0;
-
-    const inner =
-      isMajor
-        ? SCALE_INNER_RADIUS - 6
-        : SCALE_INNER_RADIUS;
-
-    const start =
-      polarToCartesian(
-        CENTER_X,
-        CENTER_Y,
-        inner,
-        angle
-      );
-
-    const end =
-      polarToCartesian(
-        CENTER_X,
-        CENTER_Y,
-        SCALE_OUTER_RADIUS,
-        angle
-      );
-
-    const line =
-      document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line"
-      );
-
-    line.setAttribute(
-      "x1",
-      start.x
-    );
-
-    line.setAttribute(
-      "y1",
-      start.y
-    );
-
-    line.setAttribute(
-      "x2",
-      end.x
-    );
-
-    line.setAttribute(
-      "y2",
-      end.y
-    );
-
-    line.setAttribute(
-      "class",
-      isMajor
-        ? "scale-line major"
-        : "scale-line"
-    );
-
-    scaleLines.appendChild(
-      line
-    );
-
-    if(isMajor){
-
-      const pos =
-        polarToCartesian(
-          CENTER_X,
-          CENTER_Y,
-          LABEL_RADIUS,
-          angle
-        );
-
-      const text =
-        document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "text"
-        );
-
-      text.setAttribute(
-        "x",
-        pos.x
-      );
-
-      text.setAttribute(
-        "y",
-        pos.y + 4
-      );
-
-      text.setAttribute(
-        "class",
-        "scale-label"
-      );
-
-      text.textContent =
-        value === 0
-          ? "0/" + maxHp
-          : value;
-
-      scaleLabels.appendChild(
-        text
-      );
-
-    }
-
-  }
-
-}
-
-
-/* =========================
-   HP描画
-========================= */
-
-function renderHP(){
-
-  hp =
-    Math.max(
-      MIN_HP,
-      Math.min(
-        maxHp,
-        hp
-      )
-    );
-
-  const ratio =
-    hp /
-    maxHp;
-
-  const color =
-    getHpColor();
-
-  const dashOffset =
-    CIRCUMFERENCE *
-    (
-      1 -
-      ratio
-    );
-
-  const angle =
-    hpToAngle(
-      hp
-    );
-
-  const pos =
-    polarToCartesian(
-      CENTER_X,
-      CENTER_Y,
-      HANDLE_RADIUS,
-      angle
-    );
-
-
-  hpValueEl.textContent =
-    String(
-      hp
-    ).padStart(
-      3,
-      "0"
-    );
-
-
-  hpPercentEl.textContent =
-    Math.round(
-      ratio *
-      100
-    ) +
-    "%";
-
-
-  maxHpLabel.textContent =
-    maxHp;
-
-
-  dialProgress.style.strokeDasharray =
-    CIRCUMFERENCE;
-
-
-  /*
-    transitionなし。
-    即座にゲージ更新。
-  */
-
-  dialProgress.style.strokeDashoffset =
-    dashOffset;
-
-
-  dialProgress.style.stroke =
-    color;
-
-
-  hpValueEl.style.fill =
-    color;
-
-
-  dialHandle.style.stroke =
-    color;
-
-
-  handleCenter.style.fill =
-    color;
-
-
-  dialHandle.setAttribute(
-    "cx",
-    pos.x
-  );
-
-
-  dialHandle.setAttribute(
-    "cy",
-    pos.y
-  );
-
-
-  handleCenter.setAttribute(
-    "cx",
-    pos.x
-  );
-
-
-  handleCenter.setAttribute(
-    "cy",
-    pos.y
-  );
-
-
-  const inner =
-    polarToCartesian(
-      CENTER_X,
-      CENTER_Y,
-      HANDLE_RADIUS - 4,
-      angle
-    );
-
-
-  const outer =
-    polarToCartesian(
-      CENTER_X,
-      CENTER_Y,
-      HANDLE_RADIUS + 4,
-      angle
-    );
-
-
-  handleLine.setAttribute(
-    "x1",
-    inner.x
-  );
-
-
-  handleLine.setAttribute(
-    "y1",
-    inner.y
-  );
-
-
-  handleLine.setAttribute(
-    "x2",
-    outer.x
-  );
-
-
-  handleLine.setAttribute(
-    "y2",
-    outer.y
-  );
-
-}
-
-
-/* =========================
-   全体描画
-========================= */
-
-function renderAll(){
-
-  createDialScale();
-
-  renderHP();
-
-  updateSelectedOptionText();
-
-  renderEvolutionButton();
-
-  monitorName.textContent =
-    selectedBasePokemon
-      ? getCurrentPokemonName()
-      : "LIFE MONITOR";
-
-}
-
-
-/* =========================
-   pointer座標
-========================= */
-
-function getPointerPosition(
-  event
-){
-
-  const rect =
-    hpDial.getBoundingClientRect();
-
-  return {
-
-    x:
-      (
-        event.clientX -
-        rect.left
-      ) *
-      (
-        360 /
-        rect.width
-      ),
-
-    y:
-      (
-        event.clientY -
-        rect.top
-      ) *
-      (
-        360 /
-        rect.height
-      )
-
-  };
-
-}
-
-
-function getPointerAngle(
-  event
-){
-
-  const p =
-    getPointerPosition(
-      event
-    );
-
-  return Math.atan2(
-    p.y -
-      CENTER_Y,
-
-    p.x -
-      CENTER_X
-  ) *
-  180 /
-  Math.PI;
-
-}
-
-
-/* =========================
-   タップ → HPジャンプ
-========================= */
-
-function jumpToTappedHp(
-  event
-){
-
-  if(isEvolving){
-
-    return;
-
-  }
-
-  const p =
-    getPointerPosition(
-      event
-    );
-
-
-  const dx =
-    p.x -
-    CENTER_X;
-
-
-  const dy =
-    p.y -
-    CENTER_Y;
-
-
-  const distance =
-    Math.sqrt(
-      dx * dx +
-      dy * dy
-    );
-
-
-  /*
-    リング付近のみ
-    タップジャンプを許可
-  */
-
-  if(
-    distance <
-      DIAL_RADIUS - 45 ||
-    distance >
-      DIAL_RADIUS + 45
-  ){
-
-    return;
-
-  }
-
-
-  let angle =
-    Math.atan2(
-      dy,
-      dx
-    ) *
-    180 /
-    Math.PI;
-
-
-  /*
-    上を0度にする。
-    時計回りで0～360。
-  */
-
-  let clockwiseAngle =
-    angle +
-    90;
-
-
-  if(
-    clockwiseAngle <
-    0
-  ){
-
-    clockwiseAngle +=
-      360;
-
-  }
-
-
-  if(
-    clockwiseAngle >=
-    360
-  ){
-
-    clockwiseAngle -=
-      360;
-
-  }
-
-
-  const degreesPerStep =
-    getDegreesPerStep();
-
-
-  let step =
-    Math.round(
-      clockwiseAngle /
-      degreesPerStep
-    );
-
-
-  const totalSteps =
-    maxHp /
-    HP_STEP;
-
-
-  if(
-    step >=
-    totalSteps
-  ){
-
-    step = 0;
-
-  }
-
-
-  let nextHp =
-    step *
-    HP_STEP;
-
-
-  /*
-    0とMAXは同じ場所。
-
-    現在値が半分以上ならMAX、
-    半分未満なら0。
-  */
-
-  if(step === 0){
-
-    nextHp =
-      hp >=
-      maxHp / 2
-        ? maxHp
-        : 0;
-
-  }
-
-
-  hp =
-    nextHp;
-
-
-  accumulatedAngle =
-    0;
-
-
-  previousPointerAngle =
-    null;
-
-
-  renderHP();
-
-}
-
-
-/* =========================
-   ドラッグ
-========================= */
-
-function updateHpFromDrag(
-  event
-){
-
-  if(isEvolving){
-
-    return;
-
-  }
-
-
-  const currentAngle =
-    getPointerAngle(
-      event
-    );
-
-
-  if(
-    previousPointerAngle ===
-    null
-  ){
-
-    previousPointerAngle =
-      currentAngle;
-
-    return;
-
-  }
-
-
-  let difference =
-    currentAngle -
-    previousPointerAngle;
-
-
-  if(
-    difference >
-    180
-  ){
-
-    difference -=
-      360;
-
-  }
-
-
-  if(
-    difference <
-    -180
-  ){
-
-    difference +=
-      360;
-
-  }
-
-
-  accumulatedAngle +=
-    difference;
-
-
-  const stepAngle =
-    getDegreesPerStep();
-
-
-  /*
-    時計回り +10
-  */
-
-  while(
-    accumulatedAngle >=
-    stepAngle
-  ){
-
-    if(
-      hp <
-      maxHp
-    ){
-
-      hp =
-        Math.min(
-          maxHp,
-          hp +
-          HP_STEP
-        );
-
-
-      /*
-        即描画
-      */
-
-      renderHP();
-
-    }
-
-
-    accumulatedAngle -=
-      stepAngle;
-
-  }
-
-
-  /*
-    反時計回り -10
-  */
-
-  while(
-    accumulatedAngle <=
-    -stepAngle
-  ){
-
-    if(
-      hp >
-      MIN_HP
-    ){
-
-      hp =
-        Math.max(
-          MIN_HP,
-          hp -
-          HP_STEP
-        );
-
-
-      renderHP();
-
-    }
-
-
-    accumulatedAngle +=
-      stepAngle;
-
-  }
-
-
-  if(
-    hp ===
-      maxHp &&
-    accumulatedAngle >
-      0
-  ){
-
-    accumulatedAngle =
-      0;
-
-  }
-
-
-  if(
-    hp ===
-      MIN_HP &&
-    accumulatedAngle <
-      0
-  ){
-
-    accumulatedAngle =
-      0;
-
-  }
-
-
-  /*
-    必ず現在角度を毎回更新。
-    これで指への追従遅延を減らす。
-  */
-
-  previousPointerAngle =
-    currentAngle;
-
-}
-
-
-/* =========================
-   pointerdown
-========================= */
-
-dialContainer.addEventListener(
-  "pointerdown",
-  event => {
-
-    if(isEvolving){
-
-      return;
-
-    }
-
-
-    event.preventDefault();
-
-
-    isDragging =
-      true;
-
-
-    pointerMoved =
-      false;
-
-
-    pointerStartX =
-      event.clientX;
-
-
-    pointerStartY =
-      event.clientY;
-
-
-    previousPointerAngle =
-      getPointerAngle(
-        event
-      );
-
-
-    accumulatedAngle =
-      0;
-
-
-    dialContainer.classList.add(
-      "dragging"
-    );
-
-
-    try{
-
-      dialContainer.setPointerCapture(
-        event.pointerId
-      );
-
-    }catch(error){
-    }
-
-  }
-);
-
-
-/* =========================
-   pointermove
-========================= */
-
-dialContainer.addEventListener(
-  "pointermove",
-  event => {
-
-    if(
-      !isDragging ||
-      isEvolving
-    ){
-
-      return;
-
-    }
-
-
-    event.preventDefault();
-
-
-    const dx =
-      event.clientX -
-      pointerStartX;
-
-
-    const dy =
-      event.clientY -
-      pointerStartY;
-
-
-    const distance =
-      Math.sqrt(
-        dx * dx +
-        dy * dy
-      );
-
-
-    if(
-      distance >=
-      TAP_MOVE_THRESHOLD
-    ){
-
-      pointerMoved =
-        true;
-
-    }
-
-
-    if(pointerMoved){
-
-      updateHpFromDrag(
-        event
-      );
-
-    }
-
-  },
-  {
-    passive:false
-  }
-);
-
-
-/* =========================
-   操作終了
-========================= */
-
-function finishPointer(
-  event,
-  allowTap
-){
-
-  /*
-    動いていなければ
-    タップ操作として処理
-  */
-
-  if(
-    isDragging &&
-    allowTap &&
-    !pointerMoved &&
-    !isEvolving
-  ){
-
-    jumpToTappedHp(
-      event
-    );
-
-  }
-
-
-  isDragging =
-    false;
-
-
-  pointerMoved =
-    false;
-
-
-  previousPointerAngle =
-    null;
-
-
-  accumulatedAngle =
-    0;
-
-
-  dialContainer.classList.remove(
-    "dragging"
-  );
-
-
-  try{
-
-    if(
-      dialContainer.hasPointerCapture(
-        event.pointerId
-      )
-    ){
-
-      dialContainer.releasePointerCapture(
-        event.pointerId
-      );
-
-    }
-
-  }catch(error){
-  }
-
-}
-
-
-dialContainer.addEventListener(
-  "pointerup",
-  event => {
-
-    finishPointer(
-      event,
-      true
-    );
-
-  }
-);
-
-
-dialContainer.addEventListener(
-  "pointercancel",
-  event => {
-
-    finishPointer(
-      event,
-      false
-    );
-
-  }
-);
-
-
-/* =========================
-   スクロール防止
-========================= */
-
-dialContainer.addEventListener(
-  "touchmove",
-  event => {
-
-    event.preventDefault();
-
-  },
-  {
-    passive:false
-  }
-);
-
-
-/* =========================
-   ポケモン変更
-========================= */
-
-pokemonSelect.addEventListener(
-  "change",
-  () => {
-
-    if(isEvolving){
-
-      return;
-
-    }
-
-
-    Array.from(
-      pokemonSelect.options
-    ).forEach(
-      option => {
-
-        if(
-          evolutionData[
-            option.value
-          ]
-        ){
-
-          option.textContent =
-            option.value;
-
-        }
-
-      }
-    );
-
-
-    selectedBasePokemon =
-      pokemonSelect.value;
-
-
-    evolutionStage =
-      0;
-
-
-    maxHp =
-      BASE_MAX_HP;
-
-
-    hp =
-      BASE_MAX_HP;
-
-
-    renderAll();
-
-  }
-);
-
-
-/* =========================
-   進化
-========================= */
-
-evolutionButton.addEventListener(
-  "click",
-  () => {
-
-    if(
-      isEvolving ||
-      !hasNextEvolution()
-    ){
-
-      return;
-
-    }
-
-
-    const line =
-      getEvolutionLine();
-
-
-    const nextStage =
-      evolutionStage +
-      1;
-
-
-    const next =
-      line[
-        nextStage
-      ];
-
-
-    /*
-      ダメージ量を保持
-    */
-
-    const damage =
-      maxHp -
-      hp;
-
-
-    isEvolving =
-      true;
-
-
-    evolutionButton.disabled =
-      true;
-
-
-    evolutionButton.classList.remove(
-      "show"
-    );
-
-
-    evolutionText.textContent =
-      "EVOLUTION";
-
-
-    evolutionOverlay.classList.add(
-      "active"
-    );
-
-
-    digitalUnit.classList.add(
-      "evolving"
-    );
-
-
-    setTimeout(
-      () => {
-
-        evolutionStage =
-          nextStage;
-
-
-        maxHp =
-          next.maxHp;
-
-
-        hp =
-          Math.max(
-            MIN_HP,
-            maxHp -
-            damage
-          );
-
-
-        updateSelectedOptionText();
-
-
-        monitorName.textContent =
-          next.name;
-
-
-        createDialScale();
-
-
-        renderHP();
-
-
-        evolutionText.textContent =
-          next.name;
-
-      },
-      650
-    );
-
-
-    setTimeout(
-      () => {
-
-        evolutionOverlay.classList.remove(
-          "active"
-        );
-
-
-        digitalUnit.classList.remove(
-          "evolving"
-        );
-
-
-        isEvolving =
-          false;
-
-
-        renderEvolutionButton();
-
-      },
-      1550
-    );
-
-  }
-);
-
-
-/* =========================
-   RESET
-========================= */
-
-resetBtn.addEventListener(
-  "click",
-  () => {
-
-    if(isEvolving){
-
-      return;
-
-    }
-
-
-    const selected =
-      pokemonSelect.value;
-
-
-    const option =
-      pokemonSelect.options[
-        pokemonSelect.selectedIndex
-      ];
-
-
-    if(
-      option &&
-      selected
-    ){
-
-      option.textContent =
-        selected;
-
-    }
-
-
-    selectedBasePokemon =
-      selected;
-
-
-    evolutionStage =
-      0;
-
-
-    maxHp =
-      BASE_MAX_HP;
-
-
-    hp =
-      BASE_MAX_HP;
-
-
-    previousPointerAngle =
-      null;
-
-
-    accumulatedAngle =
-      0;
-
-
-    renderAll();
-
-  }
-);
-
-
-/* =========================
-   初期表示
-========================= */
-
-renderAll();
-
-</script>
-
-</body>
-</html>
+          class
